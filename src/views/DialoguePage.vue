@@ -27,23 +27,37 @@ export default {
     };
   },
   methods: {
-    // Method to cut the inputString into tokens and random items
-    cutString(inputString) {
+    // Check for multiple lines of random dialogue
+    async checkInput(inputString) {
+      const checkRegex = /\|inputSeparator/g;
+      const checks = inputString.match(checkRegex);
+      const count = checks ? checks.length : 0;
+      console.log('Check: ', count);
+
+      if (count > 1) {
+        console.log('Input only one line of random dialogue');
+        return false;
+      }
+
+      return true;
+    },
+
+    async cutString(inputString) {
       const separatorRegex = /\|inputSeparator=(..)/;
       const separatorMatch = inputString.match(separatorRegex);
 
       if (separatorMatch) {
         this.separator = separatorMatch[1];
         console.log('Separator:', this.separator);
-        return this.cutStringWithSeparator(inputString);
+        return await this.cutStringWithSeparator(inputString);
       } else {
         console.log('No Separator Found');
-        return this.cutStringWithoutSeparator(inputString);
+        return await this.cutStringWithoutSeparator(inputString);
       }
     },
 
     // Method to handle cuts when separator is detected
-    cutStringWithSeparator(inputString) {
+    async cutStringWithSeparator(inputString) {
       const token_regex = /"(.*?)"/g;
       const tokenMatch = token_regex.exec(inputString);
       if (!tokenMatch) {
@@ -75,7 +89,7 @@ export default {
     },
 
     // Method to handle cuts when separator is not detected
-    cutStringWithoutSeparator(inputString) {
+    async cutStringWithoutSeparator(inputString) {
       const regex = /"([^"]+)":\s*"([^"]+)"/g;
       const matches = inputString.matchAll(regex);
       const cuts = [];
@@ -89,7 +103,7 @@ export default {
     },
 
     // Method to process data when there is no separator
-    processDataWithoutSeparator(cuts) {
+    async processDataWithoutSeparator(cuts) {
       let contentResult = '';
       let i18nResult = '';
 
@@ -105,7 +119,7 @@ export default {
     },
 
     // Method to process data when there is a separator
-    processDataWithSeparator(cuts) {
+    async processDataWithSeparator(cuts) {
       let contentResult = '';
       let i18nResult = '';
       let randomItemIndex = {};
@@ -157,14 +171,22 @@ export default {
     },
 
     // Main method to call processData based on separator presence
-    processData() {
+    async processData() {
       const rawData = this.inputText;
-      const { cuts, separatorMatch } = this.cutString(rawData);
+      const isValidInput = await this.checkInput(rawData);
+
+      if (!isValidInput) {
+        this.contentText = '';
+        this.i18nText = '';
+        return;
+      }
+
+      const { cuts, separatorMatch } = await this.cutString(rawData);
 
       if (separatorMatch) {
-        this.processDataWithSeparator(cuts);
+        await this.processDataWithSeparator(cuts);
       } else {
-        this.processDataWithoutSeparator(cuts);
+        await this.processDataWithoutSeparator(cuts);
       }
     },
   },

@@ -1,16 +1,8 @@
 <template>
-    <div class="container">
-        <NavbarMenu />
-        Hello there
+    <div class="flex">
+        <div class="container">
+            Hello there
+        </div>
     </div>
 </template>
 
-<script>
-import NavbarMenu from './NavbarMenu.vue';
-
-export default {
-    components: {
-        NavbarMenu
-    }
-}
-</script>

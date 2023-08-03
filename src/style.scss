@@ -10,6 +10,12 @@
     text-align: center;
     color: #fff;
     background-color: #1a202c;
+    display: flex;
+}
+
+body {
+    overflow: hidden;
+    /* Add this line to disable the vertical scroll bar */
 }
 
 .input-page {
@@ -72,10 +78,49 @@
     overflow: auto;
     background-color: #4a5568;
 }
+
 .button-container {
     margin-bottom: 30px;
 }
 
 .process-button {
     @apply px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600;
-  }
+}
+
+.flex {
+    display: flex;
+}
+
+.sidebar {
+    width: 21vh;
+    /* Adjust this value to set the width of the sidebar */
+    background-color: #1a202c;
+    /* Replace this with your desired background color */
+    color: white;
+    /* Replace this with your desired text color */
+    box-sizing: border-box;
+    position: fixed;
+    /* Add this line to make the sidebar fixed */
+    top: 0;
+    /* Add this line to position the sidebar at the top */
+    left: 0;
+    /* Add this line to position the sidebar on the left */
+    height: 100vh;
+    /* Add this line to make the sidebar take the full height of the viewport */
+}
+
+.container {
+    display: flex;
+    flex: 1;
+    /* Remove the following line to make the container take the full width */
+    /* margin-left: 21vh; */
+    background-color: #1a202c;
+    /* Replace this with your desired background color for the page content */
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    /* Add this line to leave space for the fixed sidebar */
+    margin-left: 21vh;
+}

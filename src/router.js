@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 export default createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/sdv-i18nifier-app'),
   routes: [
     {
       path: '/',

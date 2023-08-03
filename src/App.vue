@@ -5,7 +5,7 @@
         <SidebarMenu />
       </div>
       <div class="content">
-        <RouterView />
+        <router-view />
       </div>
     </div>
   </div>
@@ -14,12 +14,11 @@
 <script>
 import { RouterView } from 'vue-router';
 import router from './router';
-import DialoguePage from './views/DialoguePage.vue';
 import SidebarMenu from './components/SidebarMenu.vue';
 
 export default {
     name: 'App',
     router,
-    components: { DialoguePage, RouterView, SidebarMenu }
+    components: { RouterView, SidebarMenu }
 };
 </script>

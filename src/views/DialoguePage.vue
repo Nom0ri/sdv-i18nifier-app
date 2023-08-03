@@ -1,17 +1,21 @@
 <template>
   <div class="input-page">
-    <div class="input-container left">
-      <!-- Left input field -->
-      <textarea class="input-field" placeholder="Raw data" id="raw-data" v-model="inputText"></textarea>
-      <input type="text" placeholder="Custom Prefix" v-model="customPrefix" />
+    <div class="input-containers-wrapper">
+      <div class="input-container left">
+        <!-- Left input field -->
+        <textarea class="input-field" placeholder="Raw data" id="raw-data" v-model="inputText"></textarea>
+        <input class="prefix-field" type="text" placeholder="Custom Prefix" v-model="customPrefix" />
+      </div>
+      <div class="input-container right">
+        <!-- Right input fields -->
+        <textarea class="input-field" placeholder="Content.json" id="content-field" readonly
+          v-model="contentText"></textarea>
+        <textarea class="input-field" placeholder="i18n" id="i18n-field" readonly v-model="i18nText"></textarea>
+      </div>
     </div>
-    <div class="input-container right">
-      <!-- Right input fields -->
-      <textarea class="input-field" placeholder="Content.json" id="content-field" readonly
-        v-model="contentText"></textarea>
-      <textarea class="input-field" placeholder="i18n" id="i18n-field" readonly v-model="i18nText"></textarea>
+    <div class="button-container">
+      <button class="process-button" @click="processData">Process Data</button>
     </div>
-    <button @click="processData">Process Data</button>
   </div>
 </template>
 

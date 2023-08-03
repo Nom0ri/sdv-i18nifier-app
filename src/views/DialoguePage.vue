@@ -36,14 +36,14 @@ export default {
       const checkRegex = /\|inputSeparator/g;
       const checks = inputString.match(checkRegex);
       const count = checks ? checks.length : 0;
-      console.log('Check: ', count);
 
       if (count > 1) {
-        console.log('Input only one line of random dialogue');
+        this.contentText = 'Input only one line of random dialogue';
+        this.i18nText = 'I\'m too lazy to figure out a way for it to work... sorry';
         return false;
+      } else {
+        return true;
       }
-
-      return true;
     },
 
     async cutString(inputString) {
@@ -52,10 +52,8 @@ export default {
 
       if (separatorMatch) {
         this.separator = separatorMatch[1];
-        console.log('Separator:', this.separator);
         return await this.cutStringWithSeparator(inputString);
       } else {
-        console.log('No Separator Found');
         return await this.cutStringWithoutSeparator(inputString);
       }
     },
@@ -70,7 +68,6 @@ export default {
       }
 
       const token = tokenMatch[1];
-      console.log('Token: ', token);
       const cuts_regex = new RegExp(
         `(?:Random: ?|${this.separator}|inputSeparator=${this.separator})(.*?)(?=(?:${this.separator}|\\||$))`,
         'g'
@@ -80,15 +77,12 @@ export default {
       while ((match = cuts_regex.exec(inputString)) !== null) {
         matches.push(match[1]);
       }
-      console.log('Matches: ', matches);
 
       const cuts = matches.map(match => {
         const randomItems = match.split(this.separator).map(item => item.trim());
-        console.log('Random Items:', randomItems);
         return { token, randomItems };
       });
 
-      console.log('Cuts:', cuts);
       return { cuts, separatorMatch: true };
     },
 
@@ -102,7 +96,6 @@ export default {
         const dialogue = match[2];
         cuts.push({ token, dialogue });
       }
-      console.log('Cuts:', cuts);
       return { cuts, separatorMatch: false };
     },
 
@@ -127,7 +120,6 @@ export default {
       let contentResult = '';
       let i18nResult = '';
       let randomItemIndex = {};
-
       let randomGroup = '';
       for (const cut of cuts) {
         if (cut.randomItems) {
@@ -141,11 +133,7 @@ export default {
 
             const currentIndex = randomItemIndex[token]++;
             // Check if we need to add a separator between random items
-            const itemSeparator = randomItems.length - 1 ? ` ${this.separator} ` : '';
-            console.log('itemSeparator: ', itemSeparator)
             randomGroup += `{{i18n:${prefix}${token}.${currentIndex}}} ${this.separator} `;
-            console.log('Random Group: ', randomGroup)
-            console.log('Random Items: ', randomItems)
             i18nResult += `"${prefix}${token}.${currentIndex}": "${randomItems[0].trim()}",\n`;
           } else {
             console.error(`Random items not found for token "${token}"`);
@@ -180,8 +168,6 @@ export default {
       const isValidInput = await this.checkInput(rawData);
 
       if (!isValidInput) {
-        this.contentText = '';
-        this.i18nText = '';
         return;
       }
 

@@ -1,8 +1,26 @@
 <template>
-    <div class="flex">
-        <div class="container">
-            Hello there
+    <div class="text-white text-center home">
+        <img src="../assets/logo.svg" alt="Logo" class="w-32 h-32 mx-auto mb-4 logo" />
+        <div>
+            <h1 class="text-4xl font-bold mb-4">Web i18n Converter for Stardew Valley Modding</h1>
+            <p class="text-lg mb-6">
+                Welcome to the Web i18n Converter for Stardew Valley Modding. This tool allows you to easily
+                manage and convert regular ol' CP to i18n format.
+            </p>
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold">Usage Instructions:</h2>
+                <p class="text-lg mt-2">
+                    <strong>Dialogues:</strong>
+                </p>
+
+                <p class="text-lg"> This will allow you to convert regular dialogue and mail. </p>
+                <p class="text-lg"> You can set 'custom prefix', which makes resulting i18n much more readable and easier to
+                    manage.</p>
+                <p class="text-lg"> Additionally, it works with { {Random} } dialogue tokens, but in this case, you must
+                    only convert one entry at a time.</p>
+
+            </div>
+            <p class="text-lg">If you find any problems, let me know through Discord: nom0ri</p>
         </div>
     </div>
 </template>
-

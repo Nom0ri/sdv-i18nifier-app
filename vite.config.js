@@ -1,7 +1,12 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
-export default defineConfig({
-  base: '/sdv-i18nifier-app/', 
-  plugins: [vue()],
-});
+export default ({ command }) => {
+  const isProduction = command === 'build';
+  const base = isProduction ? '/sdv-i18nifier-app/' : '/';
+
+  return defineConfig({
+    base,
+    plugins: [vue()],
+  });
+};

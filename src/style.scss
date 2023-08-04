@@ -15,7 +15,6 @@
 
 body {
     overflow: hidden;
-    /* Add this line to disable the vertical scroll bar */
 }
 
 .input-page {
@@ -91,71 +90,47 @@ body {
 }
 
 .prefix-field::placeholder {
-    padding-left: 10px; 
-  }
-/*
-.button-container {
-    margin-bottom: 30px;
+    padding-left: 10px;
 }
 
-.process-button {
-    @apply px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600;
-}
-*/
 .flex {
     display: flex;
 }
 
 .sidebar {
     width: 21vh;
-    /* Adjust this value to set the width of the sidebar */
     background-color: #1a202c;
-    /* Replace this with your desired background color */
     color: white;
-    /* Replace this with your desired text color */
     box-sizing: border-box;
     position: fixed;
-    /* Add this line to make the sidebar fixed */
     top: 0;
-    /* Add this line to position the sidebar at the top */
     left: 0;
-    /* Add this line to position the sidebar on the left */
     height: 100vh;
-    /* Add this line to make the sidebar take the full height of the viewport */
 }
 
 .container {
     display: flex;
     flex: 1;
-    /* Remove the following line to make the container take the full width */
-    /* margin-left: 21vh; */
     background-color: #1a202c;
-    /* Replace this with your desired background color for the page content */
 }
 
 .content {
     flex: 1;
     padding: 20px;
-    /* Add this line to leave space for the fixed sidebar */
     margin-left: 21vh;
 }
 
 .home {
-    /* Use the following styles to make the content fill the whole page */
     height: 100vh;
-    /* Make the content take the full height of the viewport */
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    /* Add some padding for spacing */
 }
 
 .logo {
     width: 220px;
-    /* Update the width to your desired value */
     height: 220px;
-    /* Update the height to your desired value */
 }
 
 .copy-button {
@@ -169,7 +144,16 @@ body {
 
 .page-header {
     color: #eeeeee;
-    font-size: 24px; /* Adjust the font size as needed */
-    font-weight: bold; /* Add bold style to the header */
+    font-size: 24px;
+    font-weight: bold;
     margin-bottom: 0;
-  }
+}
+
+.hide-scroll {
+    //Chrome, Safari and Opera
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    -ms-overflow-style: none;  // IE and Edge
+    scrollbar-width: none;  // Firefox
+}

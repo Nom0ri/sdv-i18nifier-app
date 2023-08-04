@@ -4,19 +4,19 @@
     <div class="input-containers-wrapper">
       <div class="input-container left">
         <!-- Left input field -->
-        <textarea class="input-field" placeholder="Input entry" id="input-data" v-model="inputText"></textarea>
+        <textarea class="input-field hide-scroll" placeholder="Input entry" id="input-data" v-model="inputText"></textarea>
         <input class="prefix-field" type="text" placeholder="Custom Prefix" v-model="customPrefix" />
       </div>
       <div class="input-container right">
         <!-- Right input fields -->
         <div class="copy-button-placement">
-          <textarea class="input-field button-padding" placeholder="Content.json" id="content-field" readonly
+          <textarea class="input-field button-padding hide-scroll" placeholder="Content.json" id="content-field" readonly
             v-model="contentText"></textarea>
           <img class="copy-button" @click="copyToClipboard('content-field')" src="../assets/copy-icon.svg"
             alt="Copy Content" />
         </div>
         <div class="copy-button-placement">
-          <textarea class="input-field button-padding" placeholder="i18n" id="i18n-field" readonly
+          <textarea class="input-field button-padding hide-scroll" placeholder="i18n" id="i18n-field" readonly
             v-model="i18nText"></textarea>
           <img class="copy-button" @click="copyToClipboard('i18n-field')" src="../assets/copy-icon.svg" alt="Copy i18n" />
         </div>

@@ -31,6 +31,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    margin-bottom: 30px;
 }
 
 .input-container {
@@ -92,7 +93,7 @@ body {
 .prefix-field::placeholder {
     padding-left: 10px; 
   }
-
+/*
 .button-container {
     margin-bottom: 30px;
 }
@@ -100,7 +101,7 @@ body {
 .process-button {
     @apply px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600;
 }
-
+*/
 .flex {
     display: flex;
 }

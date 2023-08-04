@@ -22,9 +22,6 @@
         </div>
       </div>
     </div>
-    <div class="button-container">
-      <button class="process-button" @click="processData">Process Data</button>
-    </div>
   </div>
 </template>
 
@@ -39,6 +36,22 @@ export default {
       separator: '',
     };
   },
+
+  watch: {
+    // Watch for changes in the inputText and trigger processData whenever it changes.
+    inputText: {
+      handler(newValue) {
+        this.processData(newValue);
+      },
+    },
+    // Watch for changes in the customPrefix and trigger processData whenever it changes.
+    customPrefix: {
+      handler() {
+        this.processData(this.inputText);
+      },
+    },
+  },
+  
   methods: {
     checkInput(inputString) {
       const checkRegex = /\|inputSeparator/g;
@@ -153,7 +166,7 @@ export default {
 
       if (randomGroup) {
         contentResult += `"${cuts[cuts.length - 1].token}": "{{Random: ${randomGroup}}},`;
-        contentResult = contentResult.slice(0, -1) + `|inputSeparator=${this.separator}}},`;
+        contentResult = contentResult.slice(0, -6) + `|inputSeparator=${this.separator}}},`;
       }
 
       this.contentText = contentResult;

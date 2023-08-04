@@ -12,6 +12,11 @@ export default createRouter({
       path: '/dialogues',
       name: 'Dialogues',
       component: () => import('./views/DialoguePage.vue')
+    },
+    {
+      path: '/events',
+      name: 'Events',
+      component: () => import('./views/EventPage.vue')
     }
   ]
 });

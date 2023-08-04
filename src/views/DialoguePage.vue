@@ -8,9 +8,17 @@
       </div>
       <div class="input-container right">
         <!-- Right input fields -->
-        <textarea class="input-field" placeholder="Content.json" id="content-field" readonly
-          v-model="contentText"></textarea>
-        <textarea class="input-field" placeholder="i18n" id="i18n-field" readonly v-model="i18nText"></textarea>
+        <div class="copy-button-placement">
+          <textarea class="input-field button-padding" placeholder="Content.json" id="content-field" readonly
+            v-model="contentText"></textarea>
+          <img class="copy-button" @click="copyToClipboard('content-field')" src="../assets/copy-icon.svg"
+            alt="Copy Content" />
+        </div>
+        <div class="copy-button-placement">
+          <textarea class="input-field button-padding" placeholder="i18n" id="i18n-field" readonly
+            v-model="i18nText"></textarea>
+          <img class="copy-button" @click="copyToClipboard('i18n-field')" src="../assets/copy-icon.svg" alt="Copy i18n" />
+        </div>
       </div>
     </div>
     <div class="button-container">
@@ -36,9 +44,16 @@ export default {
       const checkRegex = /\|inputSeparator/g;
       const checks = inputString.match(checkRegex);
       const count = checks ? checks.length : 0;
+      const mixRegex = /"(.*?)":/g;
+      const mixes = inputString.match(mixRegex);
+      const mixCount = mixes ? mixes.length : 0;
 
       if (count > 1) {
         this.contentText = 'Input only one line of random dialogue';
+        this.i18nText = 'I\'m too lazy to figure out a way for it to work... sorry';
+        return false;
+      } else if (count === 1 && mixCount > 1) {
+        this.contentText = 'Don\'t mix random and regular dialogue';
         this.i18nText = 'I\'m too lazy to figure out a way for it to work... sorry';
         return false;
       } else {
@@ -178,6 +193,14 @@ export default {
       } else {
         await this.processDataWithoutSeparator(cuts);
       }
+    },
+
+    // Method to copy text from the textarea to clipboard
+    copyToClipboard(textAreaId) {
+      const textArea = document.getElementById(textAreaId);
+      textArea.select();
+      document.execCommand('copy');
+      window.getSelection().removeAllRanges();
     },
   },
 };

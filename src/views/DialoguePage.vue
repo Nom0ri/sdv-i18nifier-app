@@ -1,9 +1,10 @@
 <template>
   <div class="input-page">
+    <h2 class="page-header text-2xl mb-4">Dialogues</h2>
     <div class="input-containers-wrapper">
       <div class="input-container left">
         <!-- Left input field -->
-        <textarea class="input-field" placeholder="Raw data" id="raw-data" v-model="inputText"></textarea>
+        <textarea class="input-field" placeholder="Input entry" id="input-data" v-model="inputText"></textarea>
         <input class="prefix-field" type="text" placeholder="Custom Prefix" v-model="customPrefix" />
       </div>
       <div class="input-container right">
@@ -39,14 +40,11 @@ export default {
     };
   },
   methods: {
-    // Check for multiple lines of random dialogue
-    async checkInput(inputString) {
+    checkInput(inputString) {
       const checkRegex = /\|inputSeparator/g;
-      const checks = inputString.match(checkRegex);
-      const count = checks ? checks.length : 0;
+      const count = (inputString.match(checkRegex) || []).length;
       const mixRegex = /"(.*?)":/g;
-      const mixes = inputString.match(mixRegex);
-      const mixCount = mixes ? mixes.length : 0;
+      const mixCount = (inputString.match(mixRegex) || []).length;
 
       if (count > 1) {
         this.contentText = 'Input only one line of random dialogue';
@@ -61,35 +59,33 @@ export default {
       }
     },
 
-    async cutString(inputString) {
+    cutString(inputString) {
       const separatorRegex = /\|inputSeparator=(..)/;
       const separatorMatch = inputString.match(separatorRegex);
 
       if (separatorMatch) {
         this.separator = separatorMatch[1];
-        return await this.cutStringWithSeparator(inputString);
+        return this.cutStringWithSeparator(inputString);
       } else {
-        return await this.cutStringWithoutSeparator(inputString);
+        return this.cutStringWithoutSeparator(inputString);
       }
     },
 
-    // Method to handle cuts when separator is detected
-    async cutStringWithSeparator(inputString) {
-      const token_regex = /"(.*?)"/g;
-      const tokenMatch = token_regex.exec(inputString);
-      if (!tokenMatch) {
+    cutStringWithSeparator(inputString) {
+      const tokenRegex = /"(.*?)"/g;
+      const [, token] = tokenRegex.exec(inputString) || [];
+      if (!token) {
         console.error('Token not found.');
         return { cuts: [], separatorMatch: true };
       }
 
-      const token = tokenMatch[1];
-      const cuts_regex = new RegExp(
+      const cutsRegex = new RegExp(
         `(?:Random: ?|${this.separator}|inputSeparator=${this.separator})(.*?)(?=(?:${this.separator}|\\||$))`,
         'g'
       );
       const matches = [];
       let match;
-      while ((match = cuts_regex.exec(inputString)) !== null) {
+      while ((match = cutsRegex.exec(inputString)) !== null) {
         matches.push(match[1]);
       }
 
@@ -101,21 +97,18 @@ export default {
       return { cuts, separatorMatch: true };
     },
 
-    // Method to handle cuts when separator is not detected
-    async cutStringWithoutSeparator(inputString) {
+    cutStringWithoutSeparator(inputString) {
       const regex = /"([^"]+)":\s*"([^"]+)"/g;
-      const matches = inputString.matchAll(regex);
       const cuts = [];
-      for (const match of matches) {
-        const token = match[1];
-        const dialogue = match[2];
+      let match;
+      while ((match = regex.exec(inputString)) !== null) {
+        const [, token, dialogue] = match;
         cuts.push({ token, dialogue });
       }
       return { cuts, separatorMatch: false };
     },
 
-    // Method to process data when there is no separator
-    async processDataWithoutSeparator(cuts) {
+    processDataWithoutSeparator(cuts) {
       let contentResult = '';
       let i18nResult = '';
 
@@ -130,37 +123,28 @@ export default {
       this.i18nText = i18nResult;
     },
 
-    // Method to process data when there is a separator
-    async processDataWithSeparator(cuts) {
+    processDataWithSeparator(cuts) {
       let contentResult = '';
       let i18nResult = '';
       let randomItemIndex = {};
       let randomGroup = '';
       for (const cut of cuts) {
-        if (cut.randomItems) {
-          const { token, randomItems } = cut;
-          const prefix = this.customPrefix ? `${this.customPrefix}.` : '';
+        const { token, randomItems, dialogue } = cut;
+        const prefix = this.customPrefix ? `${this.customPrefix}.` : '';
 
-          if (Array.isArray(randomItems) && randomItems.length > 0) {
-            if (!randomItemIndex[token]) {
-              randomItemIndex[token] = 0;
-            }
-
-            const currentIndex = randomItemIndex[token]++;
-            // Check if we need to add a separator between random items
-            randomGroup += `{{i18n:${prefix}${token}.${currentIndex}}} ${this.separator} `;
-            i18nResult += `"${prefix}${token}.${currentIndex}": "${randomItems[0].trim()}",\n`;
-          } else {
-            console.error(`Random items not found for token "${token}"`);
+        if (randomItems) {
+          if (!randomItemIndex[token]) {
+            randomItemIndex[token] = 0;
           }
+
+          const currentIndex = randomItemIndex[token]++;
+          randomGroup += `{{i18n:${prefix}${token}.${currentIndex}}} ${this.separator} `;
+          i18nResult += `"${prefix}${token}.${currentIndex}": "${randomItems[0].trim()}",\n`;
         } else {
-          const { token, dialogue } = cut;
-          const prefix = this.customPrefix ? `${this.customPrefix}.` : '';
           contentResult += `"${token}": "{{i18n:${prefix}${token}}}",\n`;
           i18nResult += `"${prefix}${token}": "${dialogue}",\n`;
 
           if (randomGroup) {
-            // Check if we need to add a separator after content and before random items
             contentResult += `"${token}": "{{Random: ${randomGroup}}},\n`;
             randomGroup = '';
           }
@@ -168,34 +152,31 @@ export default {
       }
 
       if (randomGroup) {
-        // If there are remaining random items after the loop ends, add them to the contentResult
-        contentResult += `"${cuts[cuts.length - 1].token}": "{{Random: ${randomGroup}}},\n`;
-        contentResult = contentResult.slice(0, -7) + `|inputSeparator=${this.separator}}},`
+        contentResult += `"${cuts[cuts.length - 1].token}": "{{Random: ${randomGroup}}},`;
+        contentResult = contentResult.slice(0, -1) + `|inputSeparator=${this.separator}}},`;
       }
 
       this.contentText = contentResult;
       this.i18nText = i18nResult;
     },
 
-    // Main method to call processData based on separator presence
-    async processData() {
+    processData() {
       const rawData = this.inputText;
-      const isValidInput = await this.checkInput(rawData);
+      const isValidInput = this.checkInput(rawData);
 
       if (!isValidInput) {
         return;
       }
 
-      const { cuts, separatorMatch } = await this.cutString(rawData);
+      const { cuts, separatorMatch } = this.cutString(rawData);
 
       if (separatorMatch) {
-        await this.processDataWithSeparator(cuts);
+        this.processDataWithSeparator(cuts);
       } else {
-        await this.processDataWithoutSeparator(cuts);
+        this.processDataWithoutSeparator(cuts);
       }
     },
 
-    // Method to copy text from the textarea to clipboard
     copyToClipboard(textAreaId) {
       const textArea = document.getElementById(textAreaId);
       textArea.select();

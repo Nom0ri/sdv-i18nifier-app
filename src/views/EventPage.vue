@@ -71,11 +71,16 @@ export default {
         },
 
         cutString(inputString) {
-            const eventRegex = /\/speak [^"]+"([^"]+)\\/g; // Updated regex pattern
+            const eventRegex = /(?:\/speak|\/question|\/message|\/end dialogue|\/splitSpeak|\/textAboveHead|\(break\)speak)[^"]*"([^"]+)\\|(?:\/quickQuestion (.*?)\(break\))/g;
             const cuts = [];
             let cut;
             while ((cut = eventRegex.exec(inputString)) !== null) {
-                cuts.push(cut[1]);
+                if (cut[1] !== undefined) {
+                    cuts.push(cut[1]);
+                }
+                else if (cut[2] !== undefined) {
+                    cuts.push(cut[2]);
+                }
             }
             return cuts;
         },

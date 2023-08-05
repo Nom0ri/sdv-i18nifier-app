@@ -4,7 +4,8 @@
     <div class="input-containers-wrapper">
       <div class="input-container left">
         <!-- Left input field -->
-        <textarea class="input-field hide-scroll" placeholder="Input entry" id="input-data" v-model="inputText"></textarea>
+        <textarea class="input-field hide-scroll" placeholder="Input entry" id="input-data"
+          v-model="inputText"></textarea>
         <input class="prefix-field" type="text" placeholder="Custom Prefix" v-model="customPrefix" />
       </div>
       <div class="input-container right">
@@ -51,21 +52,27 @@ export default {
       },
     },
   },
-  
+
   methods: {
     checkInput(inputString) {
       const checkRegex = /\|inputSeparator/g;
       const count = (inputString.match(checkRegex) || []).length;
       const mixRegex = /"(.*?)":/g;
       const mixCount = (inputString.match(mixRegex) || []).length;
+      const titleRegex = /\[\#\][^\"]/g;
+      const titleCount = (inputString.match(titleRegex) || []).length;
 
       if (count > 1) {
         this.contentText = 'Input only one line of random dialogue';
-        this.i18nText = 'I\'m too lazy to figure out a way for it to work... sorry';
+        this.i18nText = 'I\'m too lazy to figure out a way for it to work... sorry.';
         return false;
       } else if (count === 1 && mixCount > 1) {
         this.contentText = 'Don\'t mix random and regular dialogue';
-        this.i18nText = 'I\'m too lazy to figure out a way for it to work... sorry';
+        this.i18nText = 'I\'m too lazy to figure out a way for it to work... sorry.';
+        return false;
+      } else if (titleCount < mixCount) {
+        this.contentText = 'It seems some mails are missing titles, they are optional, but it\'s still nice to have them.\n\n Add this to the end of the entry: [#]title';
+        this.i18nText = 'I\'m not just saying it, because I can\'t find a way to distinguish mails from dialogues without it... definitely not.';
         return false;
       } else {
         return true;
@@ -75,11 +82,16 @@ export default {
     cutString(inputString) {
       const separatorRegex = /\|inputSeparator=(..)/;
       const separatorMatch = inputString.match(separatorRegex);
+      const titleRegex = /(?:\[\#\])(.*?)(?=\")/g;
+      const mailMatch = inputString.match(titleRegex);
 
       if (separatorMatch) {
         this.separator = separatorMatch[1];
         return this.cutStringWithSeparator(inputString);
-      } else {
+      } else if (mailMatch) {
+        return this.cutMail(inputString);
+      }
+      else {
         return this.cutStringWithoutSeparator(inputString);
       }
     },
@@ -119,6 +131,34 @@ export default {
         cuts.push({ token, dialogue });
       }
       return { cuts, separatorMatch: false };
+    },
+
+    cutMail(inputString) {
+      const mailRegex = /"(.*?)": "(.*?)(?="|%|\[#]|$)/g;
+      const titleRegex = /(?:\[\#\])(.*?)(?=\")/g;
+      const cuts = [];
+      let match;
+      let currentCut = {};
+
+      while ((match = mailRegex.exec(inputString)) !== null) {
+        const mailToken = match[1];
+        const mailText = match[2].trim();
+
+        const titleMatch = titleRegex.exec(inputString);
+        if (titleMatch !== null) {
+          const mailTitle = titleMatch[1];
+
+          currentCut = {
+            mailToken,
+            mailText,
+            mailTitle,
+          };
+
+          cuts.push(currentCut);
+        }
+      }
+
+      return { cuts, mailMatch: true };
     },
 
     processDataWithoutSeparator(cuts) {
@@ -172,6 +212,25 @@ export default {
       this.contentText = contentResult;
       this.i18nText = i18nResult;
     },
+    
+    processMailData(cuts) {
+      let contentResult = this.inputText;
+      let i18nResult = '';
+      const prefix = this.customPrefix ? `${this.customPrefix}.` : '';
+
+      for (const cut of cuts) {
+        const { mailToken, mailTitle, mailText } = cut;
+
+        i18nResult += `"${prefix}${mailToken}.title": "${mailTitle}",\n`;
+        i18nResult += `"${prefix}${mailToken}.text": "${mailText}",\n`;
+
+        contentResult = contentResult.replace(mailText, `{{i18n:${prefix}${mailToken}.text}}`);
+        contentResult = contentResult.replace(mailTitle, `{{i18n:${prefix}${mailToken}.title}}`);
+      }
+
+      this.contentText = contentResult.trim();
+      this.i18nText = i18nResult.trim();
+    },
 
     processData() {
       const rawData = this.inputText;
@@ -181,14 +240,16 @@ export default {
         return;
       }
 
-      const { cuts, separatorMatch } = this.cutString(rawData);
-
+      const { cuts, separatorMatch, mailMatch } = this.cutString(rawData);
       if (separatorMatch) {
         this.processDataWithSeparator(cuts);
+      } else if (mailMatch) {
+        this.processMailData(cuts);
       } else {
         this.processDataWithoutSeparator(cuts);
       }
     },
+
 
     copyToClipboard(textAreaId) {
       const textArea = document.getElementById(textAreaId);

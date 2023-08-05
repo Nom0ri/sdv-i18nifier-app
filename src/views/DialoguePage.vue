@@ -207,7 +207,7 @@ export default {
 
       if (randomGroup) {
         contentResult += `"${cuts[cuts.length - 1].token}": "{{Random: ${randomGroup}}},`;
-        contentResult = contentResult.slice(0, -6) + `|inputSeparator=${this.separator}}},`;
+        contentResult = contentResult.slice(0, -6) + `|inputSeparator=${this.separator}}}",\n`;
       }
 
       this.contentText = contentResult;
@@ -229,7 +229,7 @@ export default {
         contentResult = contentResult.replace(mailTitle, `{{i18n:${prefix}${mailToken}.title}}`);
       }
 
-      this.contentText = contentResult.trim();
+      this.contentText = contentResult.trim() + `\n`;
       this.i18nText = i18nResult.trim();
     },
 

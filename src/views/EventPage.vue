@@ -120,7 +120,7 @@ export default {
             }
 
             if (i18nText.trim() !== '') {
-                this.contentText = contentText.trim();
+                this.contentText = contentText.trim() + `\n`;
             } else {
                 this.contentText = '';
             }

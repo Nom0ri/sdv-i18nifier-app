@@ -14,13 +14,13 @@
                     <textarea class="input-field button-padding hide-scroll" placeholder="Content.json" id="content-field"
                         readonly v-model="contentText"></textarea>
                     <img class="copy-button" @click="copyToClipboard('content-field')" src="../assets/copy-icon.svg"
-                        alt="Copy Content" />
+                        alt="Copy Content" title="Copy" />
                 </div>
                 <div class="copy-button-placement">
                     <textarea class="input-field button-padding hide-scroll" placeholder="i18n" id="i18n-field" readonly
                         v-model="i18nText"></textarea>
                     <img class="copy-button" @click="copyToClipboard('i18n-field')" src="../assets/copy-icon.svg"
-                        alt="Copy i18n" />
+                        alt="Copy i18n" title="Copy" />
                 </div>
             </div>
         </div>
@@ -54,6 +54,19 @@ export default {
     },
 
     methods: {
+        checkInput(inputString) {
+            const mixRegex = /"(.*?)":/g;
+            const mixCount = (inputString.match(mixRegex) || []).length;
+
+            if (mixCount > 1) {
+                this.contentText = 'Only one event at a time.';
+                this.i18nText = 'Maybe I\'ll add the ability to convert more at once later.';
+                return false;
+            } else {
+                return true;
+            }
+        },
+
         findToken(inputString) {
             const tokenRegex = /(?:"|")([\w.]+)(?:"|\/)/;
             const match = inputString.match(tokenRegex);
@@ -86,6 +99,12 @@ export default {
         },
 
         processData(inputString) {
+            const rawData = this.inputText;
+            const isValidInput = this.checkInput(rawData);
+
+            if (!isValidInput) {
+                return;
+            }
             const token = this.findToken(inputString);
             const cuts = this.cutString(inputString);
             let i18nText = '';
@@ -100,7 +119,11 @@ export default {
                 contentText = contentText.replace(toReplace, `{{i18n:${token}.${idx}}}`);
             }
 
-            this.contentText = contentText.trim();
+            if (i18nText.trim() !== '') {
+                this.contentText = contentText.trim();
+            } else {
+                this.contentText = '';
+            }
             this.i18nText = i18nText.trim();
         },
 

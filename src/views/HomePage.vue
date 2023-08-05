@@ -8,19 +8,13 @@
                 manage and convert regular ol' CP to i18n format.
             </p>
             <div class="mb-6">
-                <h2 class="text-2xl font-bold">Usage Instructions:</h2>
-                <p class="text-lg mt-2">
-                    <strong>Dialogues:</strong>
-                </p>
-
-                <p class="text-lg"> This will allow you to convert regular dialogue and mail. </p>
-                <p class="text-lg"> You can set 'custom prefix', which makes resulting i18n much more readable and easier to
-                    manage.</p>
-                <p class="text-lg"> Additionally, it works with { {Random} } dialogue tokens, but in this case, you must
-                    only convert one entry at a time.</p>
-
+                <div class="router-button">
+                    <router-link to="/howto" class="button-link">
+                        <span class="button-text">Usage Instructions</span>
+                    </router-link>
+                </div>
             </div>
-            <p class="text-lg">If you find any problems, let me know through Discord: nom0ri</p>
         </div>
+        <span class="version-label">Version: 1.0.0</span>
     </div>
 </template>

@@ -14,12 +14,13 @@
           <textarea class="input-field button-padding hide-scroll" placeholder="Content.json" id="content-field" readonly
             v-model="contentText"></textarea>
           <img class="copy-button" @click="copyToClipboard('content-field')" src="../assets/copy-icon.svg"
-            alt="Copy Content" />
+            alt="Copy Content" title="Copy" />
         </div>
         <div class="copy-button-placement">
           <textarea class="input-field button-padding hide-scroll" placeholder="i18n" id="i18n-field" readonly
             v-model="i18nText"></textarea>
-          <img class="copy-button" @click="copyToClipboard('i18n-field')" src="../assets/copy-icon.svg" alt="Copy i18n" />
+          <img class="copy-button" @click="copyToClipboard('i18n-field')" src="../assets/copy-icon.svg" alt="Copy i18n"
+            title="Copy" />
         </div>
       </div>
     </div>
@@ -63,14 +64,14 @@ export default {
       const titleCount = (inputString.match(titleRegex) || []).length;
 
       if (count > 1) {
-        this.contentText = 'Input only one line of random dialogue';
-        this.i18nText = 'I\'m too lazy to figure out a way for it to work... sorry.';
+        this.contentText = 'Input only one line of random dialogue.';
+        this.i18nText = 'Maybe I\'ll add the ability to convert more at once later.';
         return false;
       } else if (count === 1 && mixCount > 1) {
-        this.contentText = 'Don\'t mix random and regular dialogue';
-        this.i18nText = 'I\'m too lazy to figure out a way for it to work... sorry.';
+        this.contentText = 'Don\'t mix random and regular dialogue.';
+        this.i18nText = 'Maybe I\'ll add the ability to convert more at once later.';
         return false;
-      } else if (titleCount < mixCount) {
+      } else if (titleCount !==0 && titleCount < mixCount) {
         this.contentText = 'It seems some mails are missing titles, they are optional, but it\'s still nice to have them.\n\n Add this to the end of the entry: [#]title';
         this.i18nText = 'I\'m not just saying it, because I can\'t find a way to distinguish mails from dialogues without it... definitely not.';
         return false;
@@ -212,7 +213,7 @@ export default {
       this.contentText = contentResult;
       this.i18nText = i18nResult;
     },
-    
+
     processMailData(cuts) {
       let contentResult = this.inputText;
       let i18nResult = '';

@@ -17,6 +17,11 @@ export default createRouter({
       path: '/events',
       name: 'Events',
       component: () => import('./views/EventPage.vue')
+    },
+    {
+      path: '/howto',
+      name: 'HowTo',
+      component: () => import('./views/IntructionsPage.vue')
     }
   ]
 });

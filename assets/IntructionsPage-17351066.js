@@ -1,4 +1,4 @@
-import{_ as a,o as r,c as d,a as e,d as s,v as i,e as l}from"./index-8cc83561.js";const p={data(){return{inputText:`Input Entry
+import{_ as a,o as r,c as d,a as e,d as s,v as i,e as l}from"./index-f9b121d5.js";const p={data(){return{inputText:`Input Entry
 "winter_7": "Some dialogue"`,contentText:`Content.json
 "winter_7": "{{i18n:Optional_Prefix.winter_7}}"`,i18nText:`i18n
 "Optional_Prefix.winter_7": "Some dialogue"`,customPrefix:"Optional_Prefix",eventText:`Input Entry

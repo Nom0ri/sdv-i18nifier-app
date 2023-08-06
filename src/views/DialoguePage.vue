@@ -71,7 +71,7 @@ export default {
         this.contentText = 'Don\'t mix random and regular dialogue.';
         this.i18nText = 'Maybe I\'ll add the ability to convert more at once later.';
         return false;
-      } else if (titleCount !==0 && titleCount < mixCount) {
+      } else if (titleCount !== 0 && titleCount < mixCount) {
         this.contentText = 'It seems some mails are missing titles, they are optional, but it\'s still nice to have them.\n\n Add this to the end of the entry: [#]title';
         this.i18nText = 'I\'m not just saying it, because I can\'t find a way to distinguish mails from dialogues without it... definitely not.';
         return false;
@@ -124,26 +124,28 @@ export default {
     },
 
     cutStringWithoutSeparator(inputString) {
-      const regex = /"([^"]+)":\s*"([^"]+)"/g;
+      const regex = /"((?:\\.|[^"\\])*)":\s*"((?:\\.|[^"\\])*)"/g;
       const cuts = [];
       let match;
       while ((match = regex.exec(inputString)) !== null) {
         const [, token, dialogue] = match;
-        cuts.push({ token, dialogue });
+        const unescapedToken = token.replace(/\\(")/g, '\\"');
+        const unescapedDialogue = dialogue.replace(/\\(")/g, '\\"');
+        cuts.push({ token: unescapedToken, dialogue: unescapedDialogue });
       }
       return { cuts, separatorMatch: false };
     },
 
     cutMail(inputString) {
-      const mailRegex = /"(.*?)": "(.*?)(?="|%|\[#]|$)/g;
+      const mailRegex = /"(.*?)(?<!\\)": "(.*?(?<!\\))(?="|%|\[#]|$)/g;
       const titleRegex = /(?:\[\#\])(.*?)(?=\")/g;
       const cuts = [];
       let match;
       let currentCut = {};
 
       while ((match = mailRegex.exec(inputString)) !== null) {
-        const mailToken = match[1];
-        const mailText = match[2].trim();
+        const mailToken = match[1]
+        const mailText = match[2].trim()
 
         const titleMatch = titleRegex.exec(inputString);
         if (titleMatch !== null) {

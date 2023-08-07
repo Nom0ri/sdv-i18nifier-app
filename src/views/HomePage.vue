@@ -15,6 +15,6 @@
                 </div>
             </div>
         </div>
-        <span class="version-label">Version: 1.0.0</span>
+        <span class="version-label">Version: 1.1.0</span>
     </div>
 </template>

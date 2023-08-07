@@ -23,21 +23,18 @@
                     </router-link>
                     <router-link :to="{ name: 'Dialogues' }"
                         class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300">
-                        <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
+                        <img class="w-6 h-6 stroke-current" src="../assets/convert-icon.svg"/>
                         <span class="ml-2 text-sm font-medium">Dialogues</span>
                     </router-link>
                     <router-link :to="{ name: 'Events' }"
                         class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300">
-                        <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
+                        <img class="w-6 h-6 stroke-current" src="../assets/convert-icon.svg"/>
                         <span class="ml-2 text-sm font-medium">Events</span>
+                    </router-link>
+                    <router-link :to="{ name: 'Quests' }"
+                        class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300">
+                        <img class="w-6 h-6 stroke-current" src="../assets/convert-icon.svg"/>
+                        <span class="ml-2 text-sm font-medium">Quests</span>
                     </router-link>
                 </div>
             </div>

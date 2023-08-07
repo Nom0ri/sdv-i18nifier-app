@@ -22,6 +22,21 @@ export default createRouter({
       path: '/howto',
       name: 'HowTo',
       component: () => import('./views/IntructionsPage.vue')
-    }
+    },
+    {
+      path: '/quests',
+      name: 'Quests',
+      component: () => import('./views/QuestPage.vue')
+    },/*
+    {
+      path: '/movies',
+      name: 'Movies',
+      component: () => import('./views/MoviePage.vue')
+    },
+    {
+      path: '/config',
+      name: 'Config',
+      component: () => import('./views/ConfigPage.vue')
+    }*/
   ]
 });

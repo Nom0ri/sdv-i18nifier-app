@@ -84,7 +84,7 @@ export default {
         },
 
         cutString(inputString) {
-            const eventRegex = /(?:\/speak|\/question|\/message|\/end dialogue|\/splitSpeak|\/textAboveHead|\(break\)speak)[^"]*"([^"]+)\\|(?:\/quickQuestion (.*?)\(break\))/g;
+            const eventRegex = /(?:(?:\/|\\\\)speak|(?:\/|\\\\)question|(?:\/|\\\\)message|(?:\/|\\\\)end dialogue|(?:\/|\\\\)splitSpeak|(?:\/|\\\\)textAboveHead|\(break\)speak)[^"]*"([^"]+)\\|(?:\/quickQuestion (.*?)\(break\))/g;
             const cuts = [];
             let cut;
             while ((cut = eventRegex.exec(inputString)) !== null) {

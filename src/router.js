@@ -27,12 +27,12 @@ export default createRouter({
       path: '/quests',
       name: 'Quests',
       component: () => import('./views/QuestPage.vue')
-    },/*
+    },
     {
       path: '/movies',
       name: 'Movies',
       component: () => import('./views/MoviePage.vue')
-    },
+    },/*
     {
       path: '/config',
       name: 'Config',

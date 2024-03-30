@@ -32,7 +32,13 @@ export default createRouter({
       path: '/movies',
       name: 'Movies',
       component: () => import('./views/MoviePage.vue')
-    },/*
+    },
+    {
+      path: '/objects',
+      name: 'Objects',
+      component: () => import('./views/ObjectPage.vue')
+    },
+    /*
     {
       path: '/config',
       name: 'Config',

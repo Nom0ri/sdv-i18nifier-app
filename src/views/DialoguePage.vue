@@ -7,6 +7,7 @@
         <textarea class="input-field hide-scroll" placeholder="Input entry" id="input-data"
           v-model="inputText"></textarea>
         <input class="prefix-field" type="text" placeholder="Custom Prefix" v-model="customPrefix" />
+        <input class="prefix-field" type="text" placeholder="Custom Import Token" v-model="customImport" />
       </div>
       <div class="input-container right">
         <!-- Right input fields -->
@@ -36,7 +37,14 @@ export default {
       i18nText: '',
       customPrefix: '',
       separator: '',
+      customImport: '',
     };
+  },
+
+  computed: {
+    ImportToken() {
+      return this.customImport.length > 0 ? `${this.customImport}` : "ImportToken";
+    },
   },
 
   watch: {
@@ -48,6 +56,12 @@ export default {
     },
     // Watch for changes in the customPrefix and trigger processData whenever it changes.
     customPrefix: {
+      handler() {
+        this.processData(this.inputText);
+      },
+    },
+    // Watch for changes in the customImport and trigger processData whenever it changes.
+    customImport: {
       handler() {
         this.processData(this.inputText);
       },
@@ -171,7 +185,8 @@ export default {
       for (const cut of cuts) {
         const { token, dialogue } = cut;
         const prefix = this.customPrefix ? `${this.customPrefix}.` : '';
-        contentResult += `"${token}": "{{i18n:${prefix}${token}}}",\n`;
+        const tokenCheck = this.dynamicTokenCheck(dialogue);
+        contentResult += `${tokenCheck ? `"${token}": "{{i18n:${prefix}${token} {{${this.ImportToken}}} }}",\n` : `"${token}": "{{i18n:${prefix}${token}}}",\n`}`;
         i18nResult += `"${prefix}${token}": "${dialogue}",\n`;
       }
 
@@ -184,9 +199,12 @@ export default {
       let i18nResult = '';
       let randomItemIndex = {};
       let randomGroup = '';
+
       for (const cut of cuts) {
         const { token, randomItems, dialogue } = cut;
         const prefix = this.customPrefix ? `${this.customPrefix}.` : '';
+        const tokenCheck = this.dynamicTokenCheck(randomItems);
+        const dynamicToken = `${tokenCheck ? ` {{${this.ImportToken}}} ` : ``}`
 
         if (randomItems) {
           if (!randomItemIndex[token]) {
@@ -194,7 +212,7 @@ export default {
           }
 
           const currentIndex = randomItemIndex[token]++;
-          randomGroup += `{{i18n:${prefix}${token}.${currentIndex}}} ${this.separator} `;
+          randomGroup += `{{i18n:${prefix}${token}.${currentIndex}${dynamicToken}}} ${this.separator} `;
           i18nResult += `"${prefix}${token}.${currentIndex}": "${randomItems[0].trim()}",\n`;
         } else {
           contentResult += `"${token}": "{{i18n:${prefix}${token}}}",\n`;
@@ -224,10 +242,13 @@ export default {
       for (const cut of cuts) {
         const { mailToken, mailTitle, mailText } = cut;
 
+        const tokenCheck = this.dynamicTokenCheck(mailText);
+        const dynamicToken = `${tokenCheck ? ` {{${this.ImportToken}}} ` : ``}`
+
         i18nResult += `"${prefix}${mailToken}.title": "${mailTitle}",\n`;
         i18nResult += `"${prefix}${mailToken}.text": "${mailText}",\n`;
 
-        contentResult = contentResult.replace(mailText, `{{i18n:${prefix}${mailToken}.text}}`);
+        contentResult = contentResult.replace(mailText, `{{i18n:${prefix}${mailToken}.text${dynamicToken}}}`);
         contentResult = contentResult.replace(mailTitle, `{{i18n:${prefix}${mailToken}.title}}`);
       }
 
@@ -251,6 +272,14 @@ export default {
       } else {
         this.processDataWithoutSeparator(cuts);
       }
+    },
+
+    dynamicTokenCheck(dialogue) {
+      const match = dialogue.match(/[^"]*({{[^}]*}})[^"]*/)
+      if (match !== null && match[1].length > 4) {
+        return true
+      }
+      else return false;
     },
 
 

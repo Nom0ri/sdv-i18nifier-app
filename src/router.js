@@ -38,6 +38,11 @@ export default createRouter({
       name: 'Objects',
       component: () => import('./views/ObjectPage.vue')
     },
+    {
+      path: '/recipes',
+      name: 'Recipes',
+      component: () => import('./views/RecipePage.vue')
+    },
     /*
     {
       path: '/config',

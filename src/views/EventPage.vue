@@ -7,6 +7,7 @@
                 <textarea class="input-field hide-scroll" placeholder="Input entry" id="input-data"
                     v-model="inputText"></textarea>
                 <input class="prefix-field" type="text" placeholder="Custom Token" v-model="customToken" />
+                <input class="prefix-field" type="text" placeholder="Custom Import Token" v-model="customImport" />
             </div>
             <div class="input-container right">
                 <!-- Right input fields -->
@@ -35,7 +36,14 @@ export default {
             contentText: '',
             i18nText: '',
             customToken: '',
+            customImport: '',
         };
+    },
+
+    computed: {
+        ImportToken() {
+            return this.customImport.length > 0 ? `${this.customImport}` : "ImportToken";
+        },
     },
 
     watch: {
@@ -47,6 +55,12 @@ export default {
         },
         // Watch for changes in the customToken and trigger processData whenever it changes.
         customToken: {
+            handler() {
+                this.processData(this.inputText);
+            },
+        },
+        // Watch for changes in the customImport and trigger processData whenever it changes.
+        customImport: {
             handler() {
                 this.processData(this.inputText);
             },
@@ -115,8 +129,9 @@ export default {
                 const i18nKey = `"${token}.${idx}"`;
                 const i18nValue = `"${cut}"`;
                 const toReplace = `${cut}`;
+                const tokenCheck = this.dynamicTokenCheck(cut);
                 i18nText += `${i18nKey}: ${i18nValue},\n`;
-                contentText = contentText.replace(toReplace, `{{i18n:${token}.${idx}}}`);
+                contentText = contentText.replace(toReplace, tokenCheck ? `{{i18n:${token}.${idx} {{${this.ImportToken}}} }}` : `{{i18n:${token}.${idx}}}`);
             }
 
             if (i18nText.trim() !== '') {
@@ -125,6 +140,14 @@ export default {
                 this.contentText = '';
             }
             this.i18nText = i18nText.trim();
+        },
+
+        dynamicTokenCheck(dialogue) {
+            const match = dialogue.match(/[^"]*({{[^}]*}})[^"]*/)
+            if (match !== null && match[1].length > 4) {
+                return true
+            }
+            else return false;
         },
 
         copyToClipboard(textAreaId) {

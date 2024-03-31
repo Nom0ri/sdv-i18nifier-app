@@ -89,8 +89,14 @@ export default {
                     i18nText += `"${nameToken}": "${displayName}",\n`;
                     i18nText += `"${descriptionToken}": "${description}",\n`;
 
-                    contentText = contentText.replace(`"${displayName}"`, `"{{i18n:${nameToken}}}"`);
-                    contentText = contentText.replace(`"${description}"`, `"{{i18n:${descriptionToken}}}"`);
+                    var escapedDisplayName = this.escapeRegExp(displayName)
+                    var escapedDescription = this.escapeRegExp(description)
+
+                    var displayNameRegex = new RegExp(`"DisplayName":\\s*("${escapedDisplayName}")`);
+                    var descriptionRegex = new RegExp(`"Description":\\s*("${escapedDescription}")`);
+
+                    contentText = contentText.replace(displayNameRegex, `"DisplayName": "{{i18n:${nameToken}}}"`);
+                    contentText = contentText.replace(descriptionRegex, `"Description": "{{i18n:${descriptionToken}}}"`);
                 });
             }
 
@@ -103,7 +109,9 @@ export default {
         },
 
 
-
+        escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        },
 
         copyToClipboard(textAreaId) {
             const textArea = document.getElementById(textAreaId);

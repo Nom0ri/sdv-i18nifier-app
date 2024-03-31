@@ -97,6 +97,50 @@
                     </div>
                 </div>
             </div>
+            <div class="mb-6">
+                <p class="text-2xl mb-6"><strong>Data Objects:</strong></p>
+                <p class="text-lg">Works with new data objects from 1.6 update</p>
+                <p class="text-xl space">Notes:</p>
+                <p class="text-lg">Works on multiple entries at once.</p>
+                <div class="howtotextareas">
+                    <div class="input-container left">
+                        <!-- Left input field -->
+                        <textarea class="input-field hide-scroll howtotextareas" placeholder="Input Entry" id="input-data"
+                            readonly v-model="objectText"></textarea>
+                        <input class="prefix-field" type="text" placeholder="Custom Token (Empty)" v-model="objectToken"
+                            readonly />
+                    </div>
+                    <div class="input-container right">
+                        <!-- Right input fields -->
+                        <textarea class="input-field button-padding hide-scroll howtotextareas" placeholder="Content.json"
+                            id="content-field" readonly v-model="objectContent"></textarea>
+                        <textarea class="input-field button-padding hide-scroll howtotextareas" placeholder="i18n"
+                            id="i18n-field" readonly v-model="objecti18n"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-6">
+                <p class="text-2xl mb-6"><strong>Recipes:</strong></p>
+                <p class="text-lg">Works both crafting and cooking recipes.</p>
+                <p class="text-xl space">Notes:</p>
+                <p class="text-lg">Works on multiple entries at once. If there is no Translation Name i18n token will be added either way. If there are spaces in the english name, they will be replaced with '_' in the tokens.</p>
+                <div class="howtotextareas">
+                    <div class="input-container left">
+                        <!-- Left input field -->
+                        <textarea class="input-field hide-scroll howtotextareas" placeholder="Input Entry" id="input-data"
+                            readonly v-model="recipeText"></textarea>
+                        <input class="prefix-field" type="text" placeholder="Custom Token (Empty)" v-model="recipeToken"
+                            readonly />
+                    </div>
+                    <div class="input-container right">
+                        <!-- Right input fields -->
+                        <textarea class="input-field button-padding hide-scroll howtotextareas" placeholder="Content.json"
+                            id="content-field" readonly v-model="recipeContent"></textarea>
+                        <textarea class="input-field button-padding hide-scroll howtotextareas" placeholder="i18n"
+                            id="i18n-field" readonly v-model="recipei18n"></textarea>
+                    </div>
+                </div>
+            </div>
             <p class="text-lg downspace">If you find any problems, post an issue on my github or let me know through
                 Discord: nom0ri</p>
         </div>
@@ -122,7 +166,15 @@ export default {
             movieText: '{\n"NPCName": "Penny",\n"Reactions": [\n{\n"Tag": "*",\n"Response": "love",\n"SpecialResponses": {\n"BeforeMovie": {\n"ResponsePoint": null,\n"Script": "",\n"Text": "Watching a movie with mom sure brings me back!"\n},\n"DuringMovie": {\n"ResponsePoint": null,\n"Script": "/message \"(Pam and Penny are watching intently!)\"",\n"Text": ""\n},\n"AfterMovie": {\n"ResponsePoint": null,\n"Script": "",\n"Text": "It\'s great to be able to do things as a family again!"\n}\n},\n(...)',
             movieContent: '{\n"NPCName": "Penny",\n"Reactions": [\n{\n"Tag": "*",\n"Response": "love",\n"SpecialResponses": {\n"BeforeMovie": {\n"ResponsePoint": null,\n"Script": "",\n"Text": "{{i18n:Penny.Movies.0}}"\n},\n"DuringMovie": {\n"ResponsePoint": null,\n"Script": "/message \"{{i18n:Penny.Movies.1}}\",\n"Text": ""\n},\n"AfterMovie": {\n"ResponsePoint": null,\n"Script": "",\n"Text": "{{i18n:Penny.Movies.2}}"\n}\n},\n(...)',
             moviei18n: '"Penny.Movies.0": "Watching a movie with mom sure brings me back!",\n"Penny.Movies.1": "(Pam and Penny are watching intently!)",\n"Penny.Movies.2": "It\'s great to be able to do things as a family again!",',
-            movieToken: ''
+            movieToken: '',
+            objectText: '"875": {\n "Name": "Ectoplasm",\n"DisplayName": "Ectoplasm",\n"Description": "Plasm that got ectoed",\n"Type": "Quest",\n"Category": 0,\n"Price": 0\n},',
+            objectContent: '"875": {\n "Name": "Ectoplasm",\n"DisplayName": "{{i18n:875.DisplayName}}",\n"Description": "{{i18n:875.Description}}",\n"Type": "Quest",\n"Category": 0,\n"Price": 0\n}',
+            objecti18n: '"875.DisplayName": "Ectoplasm",\n"875.Description": "Plasm that got ectoed",',
+            objectToken: '',
+            recipeText: '"Salad": "20 1 22 1 419 1/25 5/196/f Emily 3/TranslationName",\n"Wild Bait": "771 10 684 5 766 5/Home/774 5/false/null/",',
+            recipeContent: '"Salad": "20 1 22 1 419 1/25 5/196/f Emily 3/{{i18n:Salad.DisplayName}}",\n"Wild Bait": "771 10 684 5 766 5/Home/774 5/false/null/{{i18n:Wild_Bait.DisplayName}}",',
+            recipei18n: '"Salad.DisplayName": "TranslationName",\n"Wild_Bait.DisplayName": "",',
+            recipeToken: ''
         };
     },
 }

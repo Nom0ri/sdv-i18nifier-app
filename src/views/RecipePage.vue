@@ -82,8 +82,8 @@ export default {
         if (matches) {
             matches.forEach(match => {
                 const [, id, text] = match.match(/"([^"]+)":\s*"([^"]+)"\s*,?/);
-                //const tokenName = `${id}.DisplayName`;
-                const tokenName = `${this.customToken.length > 0 ? this.customToken + '.' + `${id}.DisplayName`: `${id}.DisplayName`}`;
+                const tokenID = id.replace(/\s+/g, '_')
+                const tokenName = `${this.customToken.length > 0 ? this.customToken + '.' + `${tokenID}.DisplayName`: `${tokenID}.DisplayName`}`;
                 const i18nKey = text.substring(text.lastIndexOf('/') + 1);
                 i18nText += `"${tokenName}": "${i18nKey}",\n`;
                 const toReplace = `/${i18nKey}"`;

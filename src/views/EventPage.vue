@@ -143,8 +143,9 @@ export default {
         },
 
         dynamicTokenCheck(dialogue) {
-            const match = dialogue.match(/[^"]*({{[^}]*}})[^"]*/)
-            if (match !== null && match[1].length > 4) {
+            const regex = /[^"]*({{[^}]*}})[^"]*/g;
+            let match;
+            if ((match = regex.exec(dialogue)) !== null && match[0].length > 4) {
                 return true
             }
             else return false;

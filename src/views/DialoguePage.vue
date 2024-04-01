@@ -138,7 +138,7 @@ export default {
     },
 
     cutStringWithoutSeparator(inputString) {
-      const regex = /"((?:\\.|[^"\\])*)":\s*"((?:\\.|[^"\\])*)"/g;
+      const regex = /"((?:\\.|[^"\\])*)"\s*:\s*"((?:\\.|[^"\\])*)"/g;
       const cuts = [];
       let match;
       while ((match = regex.exec(inputString)) !== null) {
@@ -151,7 +151,7 @@ export default {
     },
 
     cutMail(inputString) {
-      const mailRegex = /"(.*?)(?<!\\)": "(.*?(?<!\\))(?="|%|\[#]|$)/g;
+      const mailRegex = /"(.*?)(?<!\\)"\s*:\s*"(.*?(?<!\\))(?="|%|\[#]|$)/g;
       const titleRegex = /(?:\[\#\])(.*?)(?=\")/g;
       const cuts = [];
       let match;

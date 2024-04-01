@@ -1,4 +1,4 @@
-import{_ as g,o as k,c as v,a as n,d as a,v as c}from"./index-84b72349.js";import{_ as h}from"./copy-icon-286decec.js";const _={data(){return{inputText:"",contentText:"",i18nText:"",customToken:""}},watch:{inputText:{handler(s){this.processData(s)}},customToken:{handler(){this.processData(this.inputText)}}},methods:{checkInput(s){const t=s.match(/\"([^"]+)\":\s*{[^}]*\s*"DisplayName":\s*"([^"]*)",?\s*"Description":\s*"([^"]*)"/g);return!t||t.length===0?(this.contentText="Incorrect format",this.i18nText=`Input needs to have at least this info:
+import{_ as g,o as k,c as v,a as n,d as a,v as c}from"./index-7f634ae2.js";import{_ as h}from"./copy-icon-286decec.js";const _={data(){return{inputText:"",contentText:"",i18nText:"",customToken:""}},watch:{inputText:{handler(s){this.processData(s)}},customToken:{handler(){this.processData(this.inputText)}}},methods:{checkInput(s){const t=s.match(/\"([^"]+)\":\s*{[^}]*\s*"DisplayName":\s*"([^"]*)",?\s*"Description":\s*"([^"]*)"/g);return!t||t.length===0?(this.contentText="Incorrect format",this.i18nText=`Input needs to have at least this info:
 "<ID>": {
  		 ...
  		 "DisplayName": "<DisplayName>",

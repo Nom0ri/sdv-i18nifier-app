@@ -79,7 +79,7 @@ export default {
 
                     // Extract "Description", "AllowValues", and "Section" fields
                     const descriptionMatch = match.match(/"Description":\s*"([^"]*)"/);
-                    const allowValuesMatch = match.match(/"AllowValues":\s*"([^"]*)"/);
+                    const allowValuesMatch = match.match(/"AllowValues":\s*(['"])((?:[^\\]|\\.)*?)\1/);
                     const sectionMatch = match.match(/"Section":\s*"([^"]*)"/);
 
                     if (descriptionMatch) {
@@ -90,7 +90,7 @@ export default {
 
                     // Handle AllowValues: skip if only "true" and "false" (case insensitive)
                     if (allowValuesMatch) {
-                        const values = allowValuesMatch[1].split(',').map(v => v.trim());
+                        const values = allowValuesMatch[2].split(',').map(v => v.trim());
                         // Check for "true" and "false" in any case
                         const skipValues = values.map(v => v.toLowerCase());
                         const numericValues = values.filter(v => !isNaN(v)); // Filter numeric values

@@ -28,7 +28,11 @@
 </template>
 
 <script>
+import { clipboardMixin } from '../mixins/clipboardMixin';
+
 export default {
+    mixins: [clipboardMixin],
+
     data() {
         return {
             inputText: '',
@@ -39,13 +43,11 @@ export default {
     },
 
     watch: {
-        // Watch for changes in the inputText and trigger processData whenever it changes.
         inputText: {
             handler(newValue) {
                 this.processData(newValue);
             },
         },
-        // Watch for changes in the customToken and trigger processData whenever it changes.
         customToken: {
             handler() {
                 this.processData(this.inputText);
@@ -111,13 +113,6 @@ export default {
 
         escapeRegExp(string) {
             return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        },
-
-        copyToClipboard(textAreaId) {
-            const textArea = document.getElementById(textAreaId);
-            textArea.select();
-            document.execCommand('copy');
-            window.getSelection().removeAllRanges();
         },
     },
 };

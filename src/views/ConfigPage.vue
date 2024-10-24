@@ -21,7 +21,11 @@
 </template>
 
 <script>
+import { clipboardMixin } from '../mixins/clipboardMixin'; // Adjust the path to your file
+
 export default {
+    mixins: [clipboardMixin],
+
     data() {
         return {
             inputText: '',
@@ -173,13 +177,6 @@ export default {
         escapeRegExp(string) {
             return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         },
-
-        copyToClipboard(textAreaId) {
-            const textArea = document.getElementById(textAreaId);
-            textArea.select();
-            document.execCommand('copy');
-            window.getSelection().removeAllRanges();
-        }
     },
 };
 </script>

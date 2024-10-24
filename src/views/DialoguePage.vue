@@ -29,7 +29,11 @@
 </template>
 
 <script>
+import { clipboardMixin } from '../mixins/clipboardMixin';
+
 export default {
+  mixins: [clipboardMixin],
+
   data() {
     return {
       inputText: '',
@@ -278,14 +282,6 @@ export default {
           return true
       }
       else return false;
-    },
-
-
-    copyToClipboard(textAreaId) {
-      const textArea = document.getElementById(textAreaId);
-      textArea.select();
-      document.execCommand('copy');
-      window.getSelection().removeAllRanges();
     },
   },
 };

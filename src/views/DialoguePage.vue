@@ -48,19 +48,16 @@ export default {
   },
 
   watch: {
-    // Watch for changes in the inputText and trigger processData whenever it changes.
     inputText: {
       handler(newValue) {
         this.processData(newValue);
       },
     },
-    // Watch for changes in the customPrefix and trigger processData whenever it changes.
     customPrefix: {
       handler() {
         this.processData(this.inputText);
       },
     },
-    // Watch for changes in the customImport and trigger processData whenever it changes.
     customImport: {
       handler() {
         this.processData(this.inputText);
@@ -79,15 +76,15 @@ export default {
 
       if (count > 1) {
         this.contentText = 'Input only one line of random dialogue.';
-        this.i18nText = 'Maybe I\'ll add the ability to convert more at once later.';
+        this.i18nText = '';
         return false;
       } else if (count === 1 && mixCount > 1) {
         this.contentText = 'Don\'t mix random and regular dialogue.';
-        this.i18nText = 'Maybe I\'ll add the ability to convert more at once later.';
+        this.i18nText = '';
         return false;
       } else if (titleCount !== 0 && titleCount < mixCount) {
-        this.contentText = 'It seems some mails are missing titles, they are optional, but it\'s still nice to have them.\n\n Add this to the end of the entry: [#]title';
-        this.i18nText = 'I\'m not just saying it, because I can\'t find a way to distinguish mails from dialogues without it... definitely not.';
+        this.contentText = 'Mails are missing titles, add this to the end of the entry: [#]title';
+        this.i18nText = '';
         return false;
       } else {
         return true;

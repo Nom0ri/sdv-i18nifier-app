@@ -63,7 +63,7 @@ body {
 
 .left {
     border-right: 2px solid #4a5568;
-    width: 800px;
+    width: 60vi;
     margin-right: 10px;
 }
 
@@ -79,6 +79,17 @@ body {
 .copy-button-placement textarea {
     width: 100%;
     height: 38.1vh;
+    padding-right: 40px;
+}
+
+.config-area {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.config-area textarea {
+    height: 100%;
     padding-right: 40px;
 }
 

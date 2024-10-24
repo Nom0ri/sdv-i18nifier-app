@@ -116,9 +116,9 @@ export default {
             const questInfo = this.extractQuestInfo(input);
             if (questInfo) {
                 let contentText = input;
-                contentText = contentText.replace(questInfo.title, `{{i18n:${questInfo.token}.title}}`);
-                contentText = contentText.replace(questInfo.questDetails, `{{i18n:${questInfo.token}.text}}`);
-                contentText = contentText.replace(questInfo.hint, `{{i18n:${questInfo.token}.objective}}`);
+                contentText.replace(questInfo.title, `{{i18n:${questInfo.token}.title}}`)
+                .replace(questInfo.questDetails, `{{i18n:${questInfo.token}.text}}`)
+                .replace(questInfo.hint, `{{i18n:${questInfo.token}.objective}}`);
                 let i18nText = `"${questInfo.token}.title": "${questInfo.title}",\n"${questInfo.token}.text": "${questInfo.questDetails}",\n"${questInfo.token}.objective": "${questInfo.hint}",\n`;
                 if (questInfo.reactionText && questInfo.reactionText.trim() !== '') {
                     const reactionText = questInfo.reactionText.replace(/(\r\n|\n|\r)/gm, "");

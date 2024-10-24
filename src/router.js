@@ -43,6 +43,11 @@ export default createRouter({
       name: 'Recipes',
       component: () => import('./views/RecipePage.vue')
     },
+    {
+      path: '/config',
+      name: 'Config',
+      component: () => import('./views/ConfigPage.vue')
+    },
     /*
     {
       path: '/config',

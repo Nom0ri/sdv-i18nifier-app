@@ -1,6 +1,6 @@
 <template>
     <PageLayout
-        title="Object Data"
+        title="Recipes"
         showCustomToken
         :inputText="inputText"
         :contentText="contentText"

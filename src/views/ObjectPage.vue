@@ -1,13 +1,13 @@
 <template>
     <PageLayout
         title="Object Data"
-        showCustomToken
+        showCustomPrefix
         :inputText="inputText"
         :contentText="contentText"
         :i18nText="i18nText"
-        :customToken="customToken"
+        :customPrefix="customPrefix"
         @update:inputText="inputText = $event"
-        @update:customToken="customToken = $event"
+        @update:customPrefix="customPrefix = $event"
     />
 </template>
 
@@ -22,7 +22,7 @@ export default {
             inputText: '',
             contentText: '',
             i18nText: '',
-            customToken: '',
+            customPrefix: '',
         };
     },
 
@@ -32,7 +32,7 @@ export default {
                 this.processData(newValue);
             },
         },
-        customToken: {
+        customPrefix: {
             handler() {
                 this.processData(this.inputText);
             },
@@ -69,8 +69,8 @@ export default {
                 matches.forEach(match => {
                     const [, id, displayName, description] = match.match(/"([^"]+)":\s*{[^}]*\s*"DisplayName":\s*"([^"]*)",?\s*"Description":\s*"([^"]*)"/);
 
-                    const nameToken = `${this.customToken.length > 0 ? this.customToken + '.' : ''}${id}.DisplayName`;
-                    const descriptionToken = `${this.customToken.length > 0 ? this.customToken + '.' : ''}${id}.Description`;
+                    const nameToken = `${this.customPrefix.length > 0 ? this.customPrefix + '.' : ''}${id}.DisplayName`;
+                    const descriptionToken = `${this.customPrefix.length > 0 ? this.customPrefix + '.' : ''}${id}.Description`;
 
                     i18nText += `"${nameToken}": "${displayName}",\n`;
                     i18nText += `"${descriptionToken}": "${description}",\n`;
@@ -89,7 +89,6 @@ export default {
             this.contentText = i18nText.trim() ? `${contentText}\n` : '';
             this.i18nText = i18nText.trim();
         },
-
 
         escapeRegExp(string) {
             return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

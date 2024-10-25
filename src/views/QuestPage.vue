@@ -1,37 +1,22 @@
 <template>
-    <div class="input-page">
-        <h2 class="page-header text-2xl mb-4">Quests</h2>
-        <div class="input-containers-wrapper">
-            <div class="input-container left">
-                <!-- Left input field -->
-                <textarea class="input-field hide-scroll" placeholder="Input entry" id="input-data"
-                    v-model="inputText"></textarea>
-                <input class="prefix-field" type="text" placeholder="Custom Token" v-model="customToken" />
-            </div>
-            <div class="input-container right">
-                <!-- Right input fields -->
-                <div class="copy-button-placement">
-                    <textarea class="input-field button-padding hide-scroll" placeholder="Content.json" id="content-field"
-                        readonly v-model="contentText"></textarea>
-                    <img class="copy-button" @click="copyToClipboard('content-field')" src="../assets/copy-icon.svg"
-                        alt="Copy Content" title="Copy" />
-                </div>
-                <div class="copy-button-placement">
-                    <textarea class="input-field button-padding hide-scroll" placeholder="i18n" id="i18n-field" readonly
-                        v-model="i18nText"></textarea>
-                    <img class="copy-button" @click="copyToClipboard('i18n-field')" src="../assets/copy-icon.svg"
-                        alt="Copy i18n" title="Copy" />
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
-<script>
-import { clipboardMixin } from '../mixins/clipboardMixin';
-
-export default {
-    mixins: [clipboardMixin],
+    <PageLayout
+        title="Quests"
+        showCustomToken
+        :inputText="inputText"
+        :contentText="contentText"
+        :i18nText="i18nText"
+        :customToken="customToken"
+        @update:inputText="inputText = $event"
+        @update:customToken="customToken = $event"
+    />
+  </template>
+  
+  
+  <script>
+  import PageLayout from '../components/PageLayout.vue';
+  
+  export default {
+    components: { PageLayout },
 
     data() {
         return {
@@ -118,9 +103,9 @@ export default {
             const questInfo = this.extractQuestInfo(input);
             if (questInfo) {
                 let contentText = input;
-                contentText.replace(questInfo.title, `{{i18n:${questInfo.token}.title}}`)
-                .replace(questInfo.questDetails, `{{i18n:${questInfo.token}.text}}`)
-                .replace(questInfo.hint, `{{i18n:${questInfo.token}.objective}}`);
+                contentText = contentText.replace(questInfo.title, `{{i18n:${questInfo.token}.title}}`);
+                contentText = contentText.replace(questInfo.questDetails, `{{i18n:${questInfo.token}.text}}`);
+                contentText = contentText.replace(questInfo.hint, `{{i18n:${questInfo.token}.objective}}`);
                 let i18nText = `"${questInfo.token}.title": "${questInfo.title}",\n"${questInfo.token}.text": "${questInfo.questDetails}",\n"${questInfo.token}.objective": "${questInfo.hint}",\n`;
                 if (questInfo.reactionText && questInfo.reactionText.trim() !== '') {
                     const reactionText = questInfo.reactionText.replace(/(\r\n|\n|\r)/gm, "");

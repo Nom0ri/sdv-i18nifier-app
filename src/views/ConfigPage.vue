@@ -1,30 +1,19 @@
 <template>
-    <div class="input-page">
-        <h2 class="page-header text-2xl mb-4">Config</h2>
-        <div class="input-containers-wrapper">
-            <div class="input-container left">
-                <!-- Left input field -->
-                <textarea class="input-field hide-scroll" placeholder="Input entry" id="input-data"
-                    v-model="inputText"></textarea>
-            </div>
-            <div class="input-container right">
-                <!-- Right input field -->
-                <div class="copy-button-placement config-area">
-                    <textarea class="input-field button-padding hide-scroll" placeholder="i18n" id="i18n-field" readonly
-                        v-model="i18nText"></textarea>
-                    <img class="copy-button" @click="copyToClipboard('i18n-field')" src="../assets/copy-icon.svg"
-                        alt="Copy i18n" title="Copy" />
-                </div>
-            </div>
-        </div>
-    </div>
+    <PageLayout
+    :title="'Config'"
+        :isConfigPage="true"
+        :inputText="inputText" 
+        :i18nText="i18nText" 
+        @update:inputText="inputText = $event"
+    />
 </template>
 
 <script>
-import { clipboardMixin } from '../mixins/clipboardMixin'; // Adjust the path to your file
+import PageLayout from '../components/PageLayout.vue';
+
 
 export default {
-    mixins: [clipboardMixin],
+    components: {PageLayout},
 
     data() {
         return {

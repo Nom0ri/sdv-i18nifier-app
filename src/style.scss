@@ -14,7 +14,6 @@
 }
 
 body {
-
     //Chrome, Safari and Opera
     &::-webkit-scrollbar {
         display: none;
@@ -23,8 +22,6 @@ body {
     -ms-overflow-style: none; // IE and Edge
     scrollbar-width: none; // Firefox
     background-color: #1a202c;
-
-
 }
 
 .input-page {
@@ -150,12 +147,27 @@ input.prefix-field {
 }
 
 .home {
-    height: 100vh;
+    height: calc(100vh - 20px); // Adjust for any top or bottom padding
     display: flex;
     flex-direction: column;
+    justify-content: space-between; // Push footer to the bottom
     align-items: center;
     padding: 20px;
-    margin-bottom: 30px;
+    padding-bottom: 40px; // Add bottom padding to keep footer visible
+}
+
+.home-content {
+    flex-grow: 1; // Allow this section to grow and fill space
+    display: flex;
+    flex-direction: column; // Ensure content stacks vertically
+    justify-content: center; // Center the content vertically
+    align-items: center; // Center content horizontally if necessary
+}
+
+.footer {
+    width: 100%; // Ensure the footer takes the full width
+    text-align: center; // Center align footer text
+    margin-top: auto; // Ensure the footer stays at the bottom
 }
 
 .logo {

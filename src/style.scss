@@ -168,7 +168,7 @@ input.prefix-field {
 .footer {
     width: 100%;
     text-align: center;
-    margin-top: 23vh;
+    margin-top: 17vh;
 }
 
 .logo {
@@ -300,6 +300,82 @@ input.prefix-field {
     color: #fafafa;
     //font-weight: bold;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.changelog-overlay {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.changelog-content {
+    background-color: #2d3748;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%;
+    height: 70%;
+    text-align: left;
+    position: relative;
+    margin-left: 21vh;
+    overflow-y: auto;
+}
+
+.changelog-content::-webkit-scrollbar {
+    width: 15px;
+}
+
+.changelog-content::-webkit-scrollbar-track {
+    background: #2d3748;
+    border-radius: 10px;
+}
+
+.changelog-content::-webkit-scrollbar-thumb {
+    background: #4a5568; 
+    border-radius: 10px;
+}
+
+.changelog-content::-webkit-scrollbar-thumb:hover {
+    background: #718096;
+}
+
+/* Firefox scrollbar styling */
+.changelog-content {
+    scrollbar-width: thin;
+    scrollbar-color: #4a5568 #2d3748;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.changelog-button {
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 100px;
+    background-color: transparent;
+    color: #fafafa;
+    border: solid 1px rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    font-size: 16px;
+}
+
+.changelog-button:hover {
+    border-color: #fafafa;
+    //transform: scale(1.05);
 }
 
 .lds-ellipsis-container {

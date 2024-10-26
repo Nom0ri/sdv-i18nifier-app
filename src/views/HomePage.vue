@@ -14,9 +14,10 @@
                     </router-link>
                 </div>
             </div>
+            <button class="changelog-button" @click="openChangelog">Changelog</button>
         </div>
         <div class="footer">
-            <span class="version-label">Version: 1.4.0</span>
+            <span class="version-label">Version: {{ version }}</span>
             <p class="text-lg downspace">Found any bugs? Contact me here:</p>
             <div class="icon-links">
                 <a href="https://github.com/Nom0ri/sdv-i18nifier-app/issues" target="_blank" aria-label="GitHub">
@@ -27,5 +28,69 @@
                 </a>
             </div>
         </div>
+
+        <div v-if="showChangelog" class="changelog-overlay" @click="closeOverlay">
+            <div class="changelog-content" @click.stop>
+                <span class="close" @click="closeOverlay">&times;</span>
+                <h2 class="text-xl font-bold mb-2">What's New</h2>
+                <div v-html="changelogContent"></div>
+            </div>
+        </div>
     </div>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            showChangelog: false,
+            changelogContent: '',
+            version: '1.0.0',
+        };
+    },
+    mounted() {
+        this.fetchChangelogVersion();
+    },
+    methods: {
+        async fetchChangelogVersion() {
+            try {
+                const response = await fetch('/changelog.md');
+                const text = await response.text();
+                this.version = this.extractVersion(text);
+            } catch (error) {
+                console.error('Error fetching changelog version:', error);
+            }
+        },
+        async openChangelog() {
+            try {
+                const response = await fetch('/changelog.md');
+                const text = await response.text();
+                this.changelogContent = this.convertMarkdownToHTML(text);
+                this.showChangelog = true;
+            } catch (error) {
+                console.error('Error fetching changelog:', error);
+            }
+        },
+
+        closeOverlay() {
+            this.showChangelog = false;
+        },
+
+        extractVersion(changelog) {
+            const versionMatch = changelog.match(/Version\s*\s*(\d+\.\d+\.\d+)/);
+            return versionMatch ? versionMatch[1] : 'Unknown';
+        },
+
+        convertMarkdownToHTML(markdown) {
+            return markdown
+                .replace(/#/g, '<h1>')
+                .replace(/##/g, '<h2>')
+                .replace(/###/g, '<h3>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`(.*?)`/g, '<code>$1</code>')
+                .replace(/\n/g, '<br>');
+        },
+    },
+};
+</script>

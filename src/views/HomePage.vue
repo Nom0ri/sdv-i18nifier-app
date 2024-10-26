@@ -14,7 +14,7 @@
                     </router-link>
                 </div>
             </div>
-            <button class="changelog-button" @click="openChangelog">Changelog</button>
+            <button class="changelog-button" @click="showChangelog = true">Changelog</button>
         </div>
         <div class="footer">
             <span class="version-label">Version: {{ version }}</span>
@@ -49,38 +49,32 @@ export default {
         };
     },
     mounted() {
-        this.fetchChangelogVersion();
+        this.loadChangelog();
     },
     methods: {
-        async fetchChangelogVersion() {
-            try {
-                const response = await fetch('/changelog.md');
-                const text = await response.text();
-                this.version = this.extractVersion(text);
-            } catch (error) {
-                console.error('Error fetching changelog version:', error);
-            }
+        loadChangelog() {
+            fetch('./changelog.md')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    this.changelogContent = this.convertMarkdownToHTML(text);
+                    this.version = this.extractVersion(text);
+                })
+                .catch(error => {
+                    console.error('Error fetching changelog:', error);
+                });
         },
-        async openChangelog() {
-            try {
-                const response = await fetch('/changelog.md');
-                const text = await response.text();
-                this.changelogContent = this.convertMarkdownToHTML(text);
-                this.showChangelog = true;
-            } catch (error) {
-                console.error('Error fetching changelog:', error);
-            }
-        },
-
         closeOverlay() {
             this.showChangelog = false;
         },
-
         extractVersion(changelog) {
             const versionMatch = changelog.match(/Version\s*\s*(\d+\.\d+\.\d+)/);
             return versionMatch ? versionMatch[1] : 'Unknown';
         },
-
         convertMarkdownToHTML(markdown) {
             return markdown
                 .replace(/#/g, '<h1>')

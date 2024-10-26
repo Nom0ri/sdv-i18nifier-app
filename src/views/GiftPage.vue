@@ -41,7 +41,7 @@ export default {
 
     methods: {
         checkInput(inputString) {
-            const pattern = /^"[^"]+":\s*".*\/.*\/.*\/.*\/.*\/.*"$/;
+            const pattern = /^("[^"]+":\s*".*\/.*\/.*\/.*\/.*\/.*",?\s*)+$/;
             if (!pattern.test(inputString.trim())) {
                 this.contentText = 'Invalid input';
                 this.i18nText = '';
@@ -80,8 +80,8 @@ export default {
             const isValidInput = this.checkInput(input);
             if (!isValidInput) return;
 
-            const giftData = this.extractGiftData(input);
-            if (!giftData) {
+            const entries = input.match(/"[^"]+":\s*"[^"]*"/g);
+            if (!entries) {
                 this.contentText = 'Invalid input format';
                 this.i18nText = '';
                 return;
@@ -90,10 +90,16 @@ export default {
             let contentText = input;
             let i18nText = '';
 
-            for (const [taste, reaction] of Object.entries(giftData.reactions)) {
-                const i18nKey = `${giftData.token}.${taste}`;
-                i18nText += `"${i18nKey}": "${reaction}",\n`;
-                contentText = contentText.replace(reaction, `{{i18n: ${i18nKey} }}`);
+            for (const entry of entries) {
+                const giftData = this.extractGiftData(entry);
+                if (!giftData) continue;
+
+                for (const [taste, reaction] of Object.entries(giftData.reactions)) {
+                    const i18nKey = `${giftData.token}.${taste}`;
+                    i18nText += `"${i18nKey}": "${reaction}",\n`;
+                    contentText = contentText.replace(reaction, `{{i18n: ${i18nKey}}}`);
+                }
+                i18nText += `\n`;
             }
 
             this.contentText = contentText;

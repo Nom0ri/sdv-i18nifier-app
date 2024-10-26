@@ -1,7 +1,7 @@
 <template>
     <div class="mb-6">
         <p class="text-2xl mb-6"><strong>{{ section.title }}</strong></p>
-        <p class="text-lg" v-for="description in section.descriptions" :key="description">{{ description }}</p>
+        <p class="text-lg" v-for="description in section.descriptions" :key="description" v-html="description"></p>
         <template v-if="section.notes">
             <p class="text-xl space">Notes:</p>
             <p class="text-lg" v-for="note in section.notes" :key="note" v-html="note"></p>

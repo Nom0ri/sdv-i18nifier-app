@@ -44,15 +44,14 @@ export default createRouter({
       component: () => import('./views/RecipePage.vue')
     },
     {
-      path: '/config',
-      name: 'Config',
-      component: () => import('./views/ConfigPage.vue')
+      path: '/gift',
+      name: 'Gift',
+      component: () => import('./views/GiftPage.vue')
     },
-    /*
     {
       path: '/config',
       name: 'Config',
       component: () => import('./views/ConfigPage.vue')
-    }*/
+    },
   ]
 });

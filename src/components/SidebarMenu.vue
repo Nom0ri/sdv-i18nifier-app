@@ -51,6 +51,11 @@
                         <img class="w-6 h-6 stroke-current" src="../assets/convert-icon.svg"/>
                         <span class="ml-2 text-sm font-medium">Recipes</span>
                     </router-link>
+                    <router-link :to="{ name: 'Gift' }"
+                        class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300">
+                        <img class="w-6 h-6 stroke-current" src="../assets/convert-icon.svg"/>
+                        <span class="ml-2 text-sm font-medium">Gift Tastes</span>
+                    </router-link>
                     <router-link :to="{ name: 'Config' }"
                         class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300">
                         <img class="w-6 h-6 stroke-current" src="../assets/convert-icon.svg"/>

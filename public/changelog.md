@@ -1,3 +1,8 @@
+## [Version 1.4.2] - 2025-01-14
+
+### Changes:
+- **Escaped characters**: Better escaped character handling in the Config converter.
+
 ## [Version 1.4.1] - 2025-01-14
 
 ### Changes:

@@ -52,8 +52,7 @@ export default {
             if (!isValidInput) return;
 
             // Extract individual config entries (e.g. "Material", "Texture", etc.)
-            const configMatches = rawData.match(/"([^"]+)":\s*{[^}]*}|"(AllowValues|Description|Default|Section)":\s*"[^"]*"/g);
-
+            const configMatches = rawData.match(/"(.*?[^\\])":\s*{[^}]*}|"(?:AllowValues|Description|Default|Section)":\s*"[^"]*"/g);
             let i18nText = '';
             let contentText = inputString;
             let currentKey = '';
@@ -63,7 +62,7 @@ export default {
             if (configMatches) {
                 configMatches.forEach(match => {
                     // Extract key if it matches the object definition (e.g., "Material": {...})
-                    const keyMatch = match.match(/"([^"]+)":\s*{/);
+                    const keyMatch = match.match(/"((?:\\.|[^"\\])*)":\s*{/);
                     if (keyMatch) {
                         currentKey = keyMatch[1]; // Set the current key
                         const nameToken = `config.${currentKey}.name`;
@@ -71,9 +70,9 @@ export default {
                     }
 
                     // Extract "Description", "AllowValues", and "Section" fields
-                    const descriptionMatch = match.match(/"Description":\s*"([^"]*)"/);
-                    const allowValuesMatch = match.match(/"AllowValues":\s*(['"])((?:[^\\]|\\.)*?)\1/);
-                    const sectionMatch = match.match(/"Section":\s*"([^"]*)"/);
+                    const descriptionMatch = match.match(/"Description":\s*"(.*?[^\\])"/);
+                    const allowValuesMatch = match.match(/"AllowValues":\s*(['"])((?:\\.|[^"\\])*?)\1/);
+                    const sectionMatch = match.match(/"Section":\s*"(.*?[^\\])"/);
 
                     if (descriptionMatch) {
                         const descriptionToken = `config.${currentKey}.description`;
@@ -115,7 +114,7 @@ export default {
                             addedSections.add(currentSection);
                         }
                     }
-                    
+
                     // Add empty line after each config entry
                     i18nText += '\n';
                     contentText = this.replaceWithI18nTokens(contentText, currentKey, descriptionMatch, allowValuesMatch);

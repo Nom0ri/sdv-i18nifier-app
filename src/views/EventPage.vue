@@ -70,7 +70,7 @@
         },
 
         findToken(inputString) {
-            const tokenRegex = /(?:"|")([\w.]+)(?:"|\/)/;
+            const tokenRegex = /(?:"|_|\.|-)([\w.]+)(?:"|\/)/;
             const match = inputString.match(tokenRegex);
 
             if (this.customToken.trim().length === 0) {
@@ -86,7 +86,7 @@
         },
 
         cutString(inputString) {
-            const eventRegex = /(?:(?:\/|\\\\|\r?\n)speak|question|message|end dialogue|splitSpeak|textAboveHead|\(break\)speak)[^"]*"([^"]+)\\|(?:\/quickQuestion (.*?)\(break\))/g;
+            const eventRegex = /(?:(?:\/|\\\\|\r?\n|\s)speak|question|message|end dialogue|splitSpeak|textAboveHead|\(break\)speak)[^"]*"([^"]+)\\|(?:\/\squickQuestion (.*?)\(break\))/g;
             const cuts = [];
             let cut;
             while ((cut = eventRegex.exec(inputString)) !== null) {

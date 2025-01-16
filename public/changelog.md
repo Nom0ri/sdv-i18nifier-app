@@ -1,7 +1,15 @@
 ## [Version 1.4.2] - 2025-01-14
 
 ### Changes:
-- **Escaped characters**: Better escaped character handling in the Config converter.
+- **Events**:
+
+    - Works with whitespace instead of just linebreaks now.
+    - Default token naming fixed for event IDs using {{ModID}}.
+
+## [Version 1.4.2] - 2025-01-14
+
+### Changes:
+- **Config**: Better escaped character handling.
 
 ## [Version 1.4.1] - 2025-01-14
 

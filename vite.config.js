@@ -8,5 +8,13 @@ export default ({ command }) => {
   return defineConfig({
     base,
     plugins: [vue()],
+    build: {
+      rollupOptions: {
+        input: {
+          main: 'index.html',
+          404: 'index.html'
+        }
+      }
+    }
   });
 };

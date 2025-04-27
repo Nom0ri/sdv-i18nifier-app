@@ -1,4 +1,10 @@
-## [Version 1.4.2] - 2025-01-14
+## [Version 1.4.1] - 2025-04-27
+
+### Changes:
+- **Events**:
+    - Added fallback for linking views, so it doesn't throw 404.
+    
+## [Version 1.4.3] - 2025-01-16
 
 ### Changes:
 - **Events**:

@@ -1,3 +1,8 @@
+## [Version 1.4.5] - 2025-04-30
+
+### Changes:
+- **Events**: Fixed quickQuestion handling
+    
 ## [Version 1.4.4] - 2025-04-27
 
 ### Changes:

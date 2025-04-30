@@ -86,7 +86,7 @@
         },
 
         cutString(inputString) {
-            const eventRegex = /(?:(?:\/|\\\\|\r?\n|\s)speak|question|message|end dialogue|splitSpeak|textAboveHead|\(break\)speak)[^"]*"([^"]+)\\|(?:\/\squickQuestion (.*?)\(break\))/g;
+            const eventRegex = /(?:(?:\/|\\\\|\r?\n|\s)speak|question|message|end dialogue|splitSpeak|textAboveHead|\(break\)speak)[^"]*"([^"]+)\\|(?:quickQuestion\s+|#)([^#()]+)/g;
             const cuts = [];
             let cut;
             while ((cut = eventRegex.exec(inputString)) !== null) {

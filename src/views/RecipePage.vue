@@ -76,7 +76,7 @@
                 const i18nKey = text.substring(text.lastIndexOf('/') + 1);
                 i18nText += `"${tokenName}": "${i18nKey}",\n`;
                 const toReplace = `/${i18nKey}"`;
-                const appendText = `"${id}": "${text}",\n`;
+                const appendText = `"${rawId}": "${text}",\n`;
                 contentText += appendText.replace(toReplace, `/{{i18n:${tokenName}}}"`)
             });
         }

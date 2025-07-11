@@ -103,7 +103,8 @@ export default {
 
     cutStringWithSeparator(inputString) {
       const tokenMatch = inputString.match(/"(.*?)"/);
-      const token = tokenMatch ? cleanToken(tokenMatch[1]) : null;
+      const rawToken = tokenMatch[1];
+      const token = cleanToken(rawToken);
 
       if (!token) {
         console.error('Token not found.');
@@ -120,6 +121,7 @@ export default {
       const rawItems = randomText.split(this.separator).map(s => s.trim());
 
       const cuts = rawItems.map(item => ({
+        rawToken,
         token,
         randomItems: [item]
       }));
@@ -134,9 +136,11 @@ export default {
       while ((match = regex.exec(inputString)) !== null) {
         const [, rawToken, dialogue] = match;
         const token = cleanToken(rawToken);
-        const unescapedToken = token.replace(/\\(")/g, '\\"');
-        const unescapedDialogue = dialogue.replace(/\\(")/g, '\\"');
-        cuts.push({ token: unescapedToken, dialogue: unescapedDialogue });
+        cuts.push({
+          rawToken,
+          token: token,
+          dialogue
+        });
       }
       return { cuts, separatorMatch: false };
     },
@@ -174,10 +178,12 @@ export default {
       let i18nResult = '';
 
       for (const cut of cuts) {
-        const { token, dialogue } = cut;
+        const { rawToken, token, dialogue } = cut;
         const prefix = this.customPrefix ? `${this.customPrefix}.` : '';
         const tokenCheck = this.dynamicTokenCheck(dialogue);
-        contentResult += `${tokenCheck ? `"${token}": "{{i18n:${prefix}${token} {{${this.ImportToken}}} }}",\n` : `"${token}": "{{i18n:${prefix}${token}}}",\n`}`;
+        const dynamicToken = tokenCheck ? ` {{${this.ImportToken}}} ` : '';
+
+        contentResult += `"${rawToken}": "{{i18n:${prefix}${token}${dynamicToken}}}",\n`;
         i18nResult += `"${prefix}${token}": "${dialogue}",\n`;
       }
 
@@ -192,12 +198,12 @@ export default {
       let randomGroup = '';
 
       for (const cut of cuts) {
-        const { token, randomItems, dialogue } = cut;
+        const { rawToken, token, randomItems, dialogue } = cut;
         const prefix = this.customPrefix ? `${this.customPrefix}.` : '';
         const tokenCheck = this.dynamicTokenCheck(randomItems);
-        const dynamicToken = `${tokenCheck ? ` {{${this.ImportToken}}} ` : ``}`
+        const dynamicToken = `${tokenCheck ? ` {{${this.ImportToken}}} ` : ``}`;
 
-        if (randomItems) {
+        if (randomItems && randomItems.length > 0) {
           if (!randomItemIndex[token]) {
             randomItemIndex[token] = 0;
           }
@@ -206,18 +212,18 @@ export default {
           randomGroup += `{{i18n:${prefix}${token}.${currentIndex}${dynamicToken}}} ${this.separator} `;
           i18nResult += `"${prefix}${token}.${currentIndex}": "${randomItems[0].trim()}",\n`;
         } else {
-          contentResult += `"${token}": "{{i18n:${prefix}${token}}}",\n`;
+          contentResult += `"${rawToken}": "{{i18n:${prefix}${token}}}",\n`;
           i18nResult += `"${prefix}${token}": "${dialogue}",\n`;
 
           if (randomGroup) {
-            contentResult += `"${token}": "{{Random: ${randomGroup}}},\n`;
+            contentResult += `"${rawToken}": "{{Random: ${randomGroup}}},\n`;
             randomGroup = '';
           }
         }
       }
 
       if (randomGroup) {
-        contentResult += `"${cuts[cuts.length - 1].token}": "{{Random: ${randomGroup}}},`;
+        contentResult += `"${cuts[cuts.length - 1].rawToken}": "{{Random: ${randomGroup}}},`;
         contentResult = contentResult.slice(0, -6) + `|inputSeparator=${this.separator}}}",\n`;
       }
 

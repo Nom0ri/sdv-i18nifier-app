@@ -85,7 +85,7 @@ export default {
     },
 
     cutString(inputString) {
-      const separatorRegex = /\|inputSeparator=(..)/;
+      const separatorRegex = /\|inputSeparator=(.*?)\s*}}/i;
       const separatorMatch = inputString.match(separatorRegex);
       const titleRegex = /(?:\[\#\])(.*?)(?=\")/g;
       const mailMatch = inputString.match(titleRegex);
@@ -102,29 +102,27 @@ export default {
     },
 
     cutStringWithSeparator(inputString) {
-      const tokenRegex = /"(.*?)"/g;
-      const [, rawToken] = tokenRegex.exec(inputString) || [];
-      const token = cleanToken(rawToken);
+      const tokenMatch = inputString.match(/"(.*?)"/);
+      const token = tokenMatch ? cleanToken(tokenMatch[1]) : null;
 
       if (!token) {
         console.error('Token not found.');
         return { cuts: [], separatorMatch: true };
       }
 
-      const cutsRegex = new RegExp(
-        `(?:Random: ?|${this.separator}|inputSeparator=${this.separator})(.*?)(?=(?:${this.separator}|\\||$))`,
-        'g'
-      );
-      const matches = [];
-      let match;
-      while ((match = cutsRegex.exec(inputString)) !== null) {
-        matches.push(match[1]);
+      const randomMatch = inputString.match(/Random:\s?(.*?)(?=\|inputSeparator=)/i);
+      const randomText = randomMatch ? randomMatch[1] : null;
+
+      if (!randomText) {
+        return { cuts: [], separatorMatch: true };
       }
 
-      const cuts = matches.map(match => {
-        const randomItems = match.split(this.separator).map(item => item.trim());
-        return { token, randomItems };
-      });
+      const rawItems = randomText.split(this.separator).map(s => s.trim());
+
+      const cuts = rawItems.map(item => ({
+        token,
+        randomItems: [item]
+      }));
 
       return { cuts, separatorMatch: true };
     },

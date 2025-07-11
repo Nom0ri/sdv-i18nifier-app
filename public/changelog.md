@@ -2,6 +2,7 @@
 
 ### Changes:
 - **All Sections**: {{ModID}} is now correctly removed across the whole converter. Any symbol found between the token and the first letter or number is also removed.
+- **Dialogue**: Converting random dialogue no longer adds an extra i18n entry with `}}`
 
 ## [Version 1.4.5] - 2025-04-30
 

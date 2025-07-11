@@ -14,7 +14,8 @@
   
   <script>
   import PageLayout from '../components/PageLayout.vue';
-  
+  import { cleanToken } from '../utils/scriptUtils.js';
+
   export default {
     components: { PageLayout },
 
@@ -68,7 +69,8 @@
 
         if (matches) {
             matches.forEach(match => {
-                const [, id, text] = match.match(/"([^"]+)":\s*"([^"]+)"\s*,?/);
+                const [, rawId, text] = match.match(/"([^"]+)":\s*"([^"]+)"\s*,?/);
+                const id = cleanToken(rawId);
                 const tokenID = id.replace(/\s+/g, '_')
                 const tokenName = `${this.customToken.length > 0 ? this.customToken + '.' + `${tokenID}.DisplayName`: `${tokenID}.DisplayName`}`;
                 const i18nKey = text.substring(text.lastIndexOf('/') + 1);

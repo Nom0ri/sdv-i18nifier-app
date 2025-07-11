@@ -14,7 +14,8 @@
   
   <script>
   import PageLayout from '../components/PageLayout.vue';
-  
+  import { cleanToken } from '../utils/scriptUtils.js';
+
   export default {
     components: { PageLayout },
 
@@ -75,10 +76,10 @@
                 if (this.customToken.trim().length === 0) {
                     const tokenMatch = tokenRegex.exec(input);
                     if (tokenMatch && tokenMatch[1]) {
-                        token = tokenMatch[1];
+                        token = cleanToken(tokenMatch[1]);
                     }
                 } else {
-                    token = this.customToken;
+                    token = cleanToken(this.customToken);
                 }
 
                 return {

@@ -13,6 +13,7 @@
 
 <script>
 import PageLayout from '../components/PageLayout.vue';
+import { cleanToken } from '../utils/scriptUtils.js';
 
 export default {
     components: { PageLayout },
@@ -51,14 +52,14 @@ export default {
         },
 
         extractGiftData(input) {
-            // Modify regex to detect {{ModId}} and skip it along with following `_`, `-`, `.` or whitespace
-            const giftRegex = /"((?:{{ModId}}[_.\-\s]*)?([^"']+))":\s*"([^"]*)"/i;
+            const giftRegex = /"([^"]+)":\s*"([^"]*)"/g;
             const matches = giftRegex.exec(input);
             
             if (!matches) return null;
 
-            const tokenMatch = matches[2];
-            const giftInfo = matches[3].split('/');
+            const rawToken = matches[1];
+            const tokenMatch = cleanToken(rawToken);
+            const giftInfo = matches[2].split('/');
 
             const token = this.customPrefix.trim()
                 ? `${this.customPrefix}.${tokenMatch}`
@@ -97,7 +98,7 @@ export default {
                 for (const [taste, reaction] of Object.entries(giftData.reactions)) {
                     const i18nKey = `${giftData.token}.${taste}`;
                     i18nText += `"${i18nKey}": "${reaction}",\n`;
-                    contentText = contentText.replace(reaction, `{{i18n: ${i18nKey}}}`);
+                    contentText = contentText.replace(reaction, `{{i18n:${i18nKey}}}`);
                 }
                 i18nText += `\n`;
             }

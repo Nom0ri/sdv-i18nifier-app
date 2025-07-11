@@ -17,6 +17,7 @@
 
 <script>
 import PageLayout from '../components/PageLayout.vue';
+import { cleanToken } from '../utils/scriptUtils.js';
 
 export default {
   components: { PageLayout },
@@ -102,7 +103,9 @@ export default {
 
     cutStringWithSeparator(inputString) {
       const tokenRegex = /"(.*?)"/g;
-      const [, token] = tokenRegex.exec(inputString) || [];
+      const [, rawToken] = tokenRegex.exec(inputString) || [];
+      const token = cleanToken(rawToken);
+
       if (!token) {
         console.error('Token not found.');
         return { cuts: [], separatorMatch: true };
@@ -131,7 +134,8 @@ export default {
       const cuts = [];
       let match;
       while ((match = regex.exec(inputString)) !== null) {
-        const [, token, dialogue] = match;
+        const [, rawToken, dialogue] = match;
+        const token = cleanToken(rawToken);
         const unescapedToken = token.replace(/\\(")/g, '\\"');
         const unescapedDialogue = dialogue.replace(/\\(")/g, '\\"');
         cuts.push({ token: unescapedToken, dialogue: unescapedDialogue });
@@ -147,7 +151,7 @@ export default {
       let currentCut = {};
 
       while ((match = mailRegex.exec(inputString)) !== null) {
-        const mailToken = match[1]
+        const mailToken = cleanToken(match[1])
         const mailText = match[2].trim()
 
         const titleMatch = titleRegex.exec(inputString);

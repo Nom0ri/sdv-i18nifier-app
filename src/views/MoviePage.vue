@@ -14,7 +14,8 @@
   
   <script>
   import PageLayout from '../components/PageLayout.vue';
-  
+  import { cleanToken } from '../utils/scriptUtils.js';
+
   export default {
     components: { PageLayout },
 
@@ -92,7 +93,8 @@
             if (!isValidInput) {
                 return;
             }
-            const token = this.findToken(inputString);
+            const rawToken = this.findToken(inputString);
+            const token = cleanToken(rawToken)
             const cuts = this.cutString(inputString);
             let i18nText = '';
             let contentText = inputString;

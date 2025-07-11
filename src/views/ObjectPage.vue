@@ -13,6 +13,7 @@
 
 <script>
 import PageLayout from '../components/PageLayout.vue';
+import { cleanToken } from '../utils/scriptUtils.js';
 
 export default {
     components: { PageLayout },
@@ -54,21 +55,20 @@ export default {
         },
 
         processData(inputString) {
-            const sanitizedInput = inputString.replace(/{{ModId}}_/g, '').replace(/}}/g, '');
-            const isValidInput = this.checkInput(sanitizedInput);
+            const isValidInput = this.checkInput(inputString);
 
             if (!isValidInput) {
                 return;
             }
 
-            const matches = sanitizedInput.match(/"([^"]+)":\s*{[^}]*\s*"DisplayName":\s*"([^"]*)",?\s*"Description":\s*"([^"]*)"/g);
+            const matches = inputString.match(/"([^"]+)":\s*{[^}]*\s*"DisplayName":\s*"([^"]*)",?\s*"Description":\s*"([^"]*)"/g);
             let i18nText = '';
             let contentText = inputString;
 
             if (matches) {
                 matches.forEach(match => {
-                    const [, id, displayName, description] = match.match(/"([^"]+)":\s*{[^}]*\s*"DisplayName":\s*"([^"]*)",?\s*"Description":\s*"([^"]*)"/);
-
+                    const [, rawId, displayName, description] = match.match(/"([^"]+)":\s*{[^}]*\s*"DisplayName":\s*"([^"]*)",?\s*"Description":\s*"([^"]*)"/);
+                    const id = cleanToken(rawId);
                     const nameToken = `${this.customPrefix.length > 0 ? this.customPrefix + '.' : ''}${id}.DisplayName`;
                     const descriptionToken = `${this.customPrefix.length > 0 ? this.customPrefix + '.' : ''}${id}.Description`;
 

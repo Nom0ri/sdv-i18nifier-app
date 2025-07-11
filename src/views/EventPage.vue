@@ -17,7 +17,8 @@
   
   <script>
   import PageLayout from '../components/PageLayout.vue';
-  
+  import { cleanToken } from '../utils/scriptUtils.js';
+
   export default {
     components: { PageLayout },
   
@@ -70,19 +71,14 @@
         },
 
         findToken(inputString) {
-            const tokenRegex = /(?:"|_|\.|-)([\w.]+)(?:"|\/)/;
+            const tokenRegex = /"([^"\/]+)(?="|\/)/;
             const match = inputString.match(tokenRegex);
 
-            if (this.customToken.trim().length === 0) {
-                if (match && match[1]) {
-                    const token = match[1];
-                    return token;
-                }
-            }
-            else {
-                const token = this.customToken;
-                return token
-            }
+            const rawToken = this.customToken.trim().length === 0
+                ? (match?.[1] ?? '')
+                : this.customToken;
+
+            return cleanToken(rawToken);
         },
 
         cutString(inputString) {

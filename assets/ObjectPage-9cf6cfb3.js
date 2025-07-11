@@ -1,0 +1,10 @@
+import{P as T}from"./PageLayout-34dd41b9.js";import{c as D}from"./scriptUtils-83633dc6.js";import{_ as d,r as g,o as P,g as y}from"./404-912853ea.js";const $={components:{PageLayout:T},data(){return{inputText:"",contentText:"",i18nText:"",customPrefix:""}},watch:{inputText:{handler(e){this.processData(e)}},customPrefix:{handler(){this.processData(this.inputText)}}},methods:{checkInput(e){const n=e.replace(/{{ModId}}_/g,"").match(/"([^"]+)":\s*{[^}]*\s*"DisplayName":\s*"([^"]*)",?\s*"Description":\s*"([^"]*)"/g);return!n||n.length===0?(this.contentText="Incorrect format",this.i18nText=`Input needs to have at least this info:
+"<ID>": {
+ 		 ...
+ 		 "DisplayName": "<DisplayName>",
+ 		 "Description": "<Description>", 
+ 		 ... 
+		}`,!1):!0},processData(e){if(!this.checkInput(e))return;const n=e.match(/"([^"]+)":\s*{[^}]*\s*"DisplayName":\s*"([^"]*)",?\s*"Description":\s*"([^"]*)"/g);let o="",t=e;n&&n.forEach(a=>{const[,c,i,p]=a.match(/"([^"]+)":\s*{[^}]*\s*"DisplayName":\s*"([^"]*)",?\s*"Description":\s*"([^"]*)"/),r=D(c),x=`${this.customPrefix.length>0?this.customPrefix+".":""}${r}.DisplayName`,m=`${this.customPrefix.length>0?this.customPrefix+".":""}${r}.Description`;o+=`"${x}": "${i}",
+`,o+=`"${m}": "${p}",
+`;const u=this.escapeRegExp(i),l=this.escapeRegExp(p),h=new RegExp(`"DisplayName":\\s*("${u}")`),f=new RegExp(`"Description":\\s*("${l}")`);t=t.replace(h,`"DisplayName": "{{i18n:${x}}}"`),t=t.replace(f,`"Description": "{{i18n:${m}}}"`)}),this.contentText=o.trim()?`${t}
+`:"",this.i18nText=o.trim()},escapeRegExp(e){return e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}}};function I(e,s,n,o,t,a){const c=g("PageLayout");return P(),y(c,{title:"Object Data",showCustomPrefix:"",inputText:t.inputText,contentText:t.contentText,i18nText:t.i18nText,customPrefix:t.customPrefix,"onUpdate:inputText":s[0]||(s[0]=i=>t.inputText=i),"onUpdate:customPrefix":s[1]||(s[1]=i=>t.customPrefix=i)},null,8,["inputText","contentText","i18nText","customPrefix"])}const R=d($,[["render",I]]);export{R as default};

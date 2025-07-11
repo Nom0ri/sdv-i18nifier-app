@@ -1,3 +1,9 @@
+## [Version 1.4.6] - 2025-07-11
+
+### Changes:
+- **All Sections**: `{{ModID}}` is now correctly removed across the whole converter. Any symbol found between the token and the first letter or number is also removed.
+- **Dialogue**: Converting random dialogue no longer adds an extra i18n entry with `}}`. Changed cutting logic. 
+
 ## [Version 1.4.5] - 2025-04-30
 
 ### Changes:
@@ -14,7 +20,7 @@
 - **Events**:
 
     - Works with whitespace instead of just linebreaks now.
-    - Default token naming fixed for event IDs using {{ModID}}.
+    - Default token naming fixed for event IDs using `{{ModID}}`.
 
 ## [Version 1.4.2] - 2025-01-14
 

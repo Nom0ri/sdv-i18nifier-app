@@ -43,15 +43,17 @@ export default {
     methods: {
         checkInput(inputString) {
             const sanitizedInput = inputString.replace(/{{ModId}}_/g, '');
-            const matches = sanitizedInput.match(/"([^"]+)":\s*{[^}]*\s*"DisplayName":\s*"([^"]*)",?\s*"Description":\s*"([^"]*)"/g);
 
-            if (!matches || matches.length === 0) {
+            const nameMatches = sanitizedInput.match(/"([^"]+)":\s*{[^}]*?"DisplayName":\s*"([^"]*)"/gi) || [];
+
+            const descriptionMatches = sanitizedInput.match(/"([^"]+)":\s*{[^}]*?"Description":\s*"([^"]*)"/gi) || [];
+
+            if (nameMatches.length === 0 || descriptionMatches.length === 0) {
                 this.contentText = 'Incorrect format';
                 this.i18nText = 'Input needs to have at least this info:\n"<ID>": {\n \t\t ...\n \t\t "DisplayName": "<DisplayName>",\n \t\t "Description": "<Description>", \n \t\t ... \n\t\t}';
                 return false;
-            } else {
-                return true;
             }
+            return true;
         },
 
         processData(inputString) {
@@ -61,30 +63,46 @@ export default {
                 return;
             }
 
-            const matches = inputString.match(/"([^"]+)":\s*{[^}]*\s*"DisplayName":\s*"([^"]*)",?\s*"Description":\s*"([^"]*)"/g);
+            const nameMatches = inputString.match(/"([^"]+)":\s*{[^}]*?"DisplayName":\s*"([^"]*)"/gi) || [];
+            const descriptionMatches = inputString.match(/"([^"]+)":\s*{[^}]*?"Description":\s*"([^"]*)"/gi) || [];
+
             let i18nText = '';
             let contentText = inputString;
 
-            if (matches) {
-                matches.forEach(match => {
-                    const [, rawId, displayName, description] = match.match(/"([^"]+)":\s*{[^}]*\s*"DisplayName":\s*"([^"]*)",?\s*"Description":\s*"([^"]*)"/);
-                    const id = cleanToken(rawId);
-                    const nameToken = `${this.customPrefix.length > 0 ? this.customPrefix + '.' : ''}${id}.DisplayName`;
-                    const descriptionToken = `${this.customPrefix.length > 0 ? this.customPrefix + '.' : ''}${id}.Description`;
+            const dataMap = {};
 
-                    i18nText += `"${nameToken}": "${displayName}",\n`;
-                    i18nText += `"${descriptionToken}": "${description}",\n`;
+            nameMatches.forEach(match => {
+                const [, rawId, displayName] = match.match(/"([^"]+)":\s*{[^}]*?"DisplayName":\s*"([^"]*)"/i);
+                const id = cleanToken(rawId);
+                if (!dataMap[id]) dataMap[id] = {};
+                dataMap[id].displayName = displayName;
+            });
 
-                    const escapedDisplayName = this.escapeRegExp(displayName);
-                    const escapedDescription = this.escapeRegExp(description);
+            descriptionMatches.forEach(match => {
+                const [, rawId, description] = match.match(/"([^"]+)":\s*{[^}]*?"Description":\s*"([^"]*)"/i);
+                const id = cleanToken(rawId);
+                if (!dataMap[id]) dataMap[id] = {};
+                dataMap[id].description = description;
+            });
 
-                    const displayNameRegex = new RegExp(`"DisplayName":\\s*("${escapedDisplayName}")`);
-                    const descriptionRegex = new RegExp(`"Description":\\s*("${escapedDescription}")`);
+            Object.entries(dataMap).forEach(([id, { displayName, description }]) => {
+                if (!displayName || !description) return;
 
-                    contentText = contentText.replace(displayNameRegex, `"DisplayName": "{{i18n:${nameToken}}}"`);
-                    contentText = contentText.replace(descriptionRegex, `"Description": "{{i18n:${descriptionToken}}}"`);
-                });
-            }
+                const nameToken = `${this.customPrefix.length > 0 ? this.customPrefix + '.' : ''}${id}.DisplayName`;
+                const descriptionToken = `${this.customPrefix.length > 0 ? this.customPrefix + '.' : ''}${id}.Description`;
+
+                i18nText += `"${nameToken}": "${displayName}",\n`;
+                i18nText += `"${descriptionToken}": "${description}",\n`;
+
+                const escapedDisplayName = this.escapeRegExp(displayName);
+                const escapedDescription = this.escapeRegExp(description);
+
+                const displayNameRegex = new RegExp(`"DisplayName":\\s*("${escapedDisplayName}")`, 'i');
+                const descriptionRegex = new RegExp(`"Description":\\s*("${escapedDescription}")`, 'i');
+
+                contentText = contentText.replace(displayNameRegex, `"DisplayName": "{{i18n:${nameToken}}}"`);
+                contentText = contentText.replace(descriptionRegex, `"Description": "{{i18n:${descriptionToken}}}"`);
+            });
 
             this.contentText = i18nText.trim() ? `${contentText}\n` : '';
             this.i18nText = i18nText.trim();

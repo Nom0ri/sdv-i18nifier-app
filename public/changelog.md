@@ -1,7 +1,12 @@
+## [Version 1.4.7] - 2025-09-10
+
+### Changes:
+- **Objects**: Order of `DisplayName` and `Description` doesn't matter for the converter now.
+
 ## [Version 1.4.6] - 2025-07-11
 
 ### Changes:
-- **All Sections**: All tokens are now correctly removed across the whole converter. Extra symbols will also be removed.
+- **All Sections**: All tokens are now correctly removed from i18n keys across the whole converter. Extra symbols will also be removed.
 - **Dialogue**: Converting random dialogue no longer adds an extra i18n entry with `}}`. Changed cutting logic. 
 
 ## [Version 1.4.5] - 2025-04-30

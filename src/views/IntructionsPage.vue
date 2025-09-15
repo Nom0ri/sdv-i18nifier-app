@@ -148,6 +148,23 @@ export default {
                 }
             },
             {
+                title: 'Furniture',
+                descriptions: [
+                    'Works with slash delimited furniture data.',
+                    '&nbsp;'
+                ],
+                notes: [
+                    'Works on multiple entries at once.',
+                    'If there are spaces in the English name, they will be replaced with "_" in the tokens.'
+                ],
+                inputText: '"0": "Oak Chair/chair/-1/-1/4/350/-1/Oak Chair",\n"3": "Walnut Chair/chair/-1/-1/4/350/-1/Walnut Chair/index",',
+                contentText: '"0": "Oak Chair/chair/-1/-1/4/350/-1/{{i18n:0.DisplayName}}",\n"3": "Walnut Chair/chair/-1/-1/4/350/-1/{{i18n:3.DisplayName}}/index",',
+                i18nText: '"0.DisplayName": "Oak Chair",\n"3.DisplayName": "Walnut Chair",',
+                customToken: {
+                    model: ''
+                }
+            },
+            {
                 title: 'Gift Tastes',
                 descriptions: [
                     'Works with reactions for Gift Tastes',

@@ -53,5 +53,10 @@ export default createRouter({
       name: 'Config',
       component: () => import('./views/ConfigPage.vue')
     },
+        {
+      path: '/furniture',
+      name: 'Furniture',
+      component: () => import('./views/FurniturePage.vue')
+    },
   ]
 });

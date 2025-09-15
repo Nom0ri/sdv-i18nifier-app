@@ -1,3 +1,8 @@
+## [Version 1.5.0] - 2025-09-15
+
+### New:
+- **Furniture**: Added converter for furniture data.
+
 ## [Version 1.4.7] - 2025-09-10
 
 ### Changes:

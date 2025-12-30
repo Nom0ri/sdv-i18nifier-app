@@ -42,11 +42,12 @@ export default {
 
     methods: {
         checkInput(inputString) {
-            const sanitizedInput = inputString.replace(/{{ModId}}_/g, '');
+            const sanitizedInput = inputString.replace(/{{ModId}}_/gi, '');
+            console.log(sanitizedInput)
 
-            const nameMatches = sanitizedInput.match(/"([^"]+)":\s*{[^}]*?"DisplayName":\s*"([^"]*)"/gi) || [];
+            const nameMatches = inputString.match(/"([^"]+)":\s*{[\s\S]*?"DisplayName":\s*"([^"]*)"/gi) || [];
 
-            const descriptionMatches = sanitizedInput.match(/"([^"]+)":\s*{[^}]*?"Description":\s*"([^"]*)"/gi) || [];
+            const descriptionMatches = inputString.match(/"([^"]+)":\s*{[\s\S]*?"DisplayName":\s*"([^"]*)"/gi) || [];
 
             if (nameMatches.length === 0 || descriptionMatches.length === 0) {
                 this.contentText = 'Incorrect format';
@@ -63,8 +64,8 @@ export default {
                 return;
             }
 
-            const nameMatches = inputString.match(/"([^"]+)":\s*{[^}]*?"DisplayName":\s*"([^"]*)"/gi) || [];
-            const descriptionMatches = inputString.match(/"([^"]+)":\s*{[^}]*?"Description":\s*"([^"]*)"/gi) || [];
+            const nameMatches = inputString.match(/"([^"]+)":\s*{[\s\S]*?"DisplayName":\s*"([^"]*)"/gi) || [];
+            const descriptionMatches = inputString.match(/"([^"]+)":\s*{[\s\S]*?"Description":\s*"([^"]*)"/gi) || [];
 
             let i18nText = '';
             let contentText = inputString;
@@ -72,14 +73,14 @@ export default {
             const dataMap = {};
 
             nameMatches.forEach(match => {
-                const [, rawId, displayName] = match.match(/"([^"]+)":\s*{[^}]*?"DisplayName":\s*"([^"]*)"/i);
+                const [, rawId, displayName] = match.match(/"([^"]+)":\s*{[\s\S]*?"DisplayName":\s*"([^"]*)"/i);
                 const id = cleanToken(rawId);
                 if (!dataMap[id]) dataMap[id] = {};
                 dataMap[id].displayName = displayName;
             });
 
             descriptionMatches.forEach(match => {
-                const [, rawId, description] = match.match(/"([^"]+)":\s*{[^}]*?"Description":\s*"([^"]*)"/i);
+                const [, rawId, description] = match.match(/"([^"]+)":\s*{[\s\S]*?"Description":\s*"([^"]*)"/i);
                 const id = cleanToken(rawId);
                 if (!dataMap[id]) dataMap[id] = {};
                 dataMap[id].description = description;

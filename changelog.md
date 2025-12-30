@@ -1,3 +1,8 @@
+## [Version 1.5.1] - 2025-12-30
+
+### Changes:
+- **Objects**: Fixed converter breaking when a dynamic token was present in the "Name" field.
+
 ## [Version 1.5.0] - 2025-09-15
 
 ### New:

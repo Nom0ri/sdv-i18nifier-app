@@ -42,8 +42,7 @@ export default {
 
     methods: {
         checkInput(inputString) {
-            const sanitizedInput = inputString.replace(/{{ModId}}_/gi, '');
-            console.log(sanitizedInput)
+            //const sanitizedInput = inputString.replace(/{{ModId}}_/gi, '');
 
             const nameMatches = inputString.match(/"([^"]+)":\s*{[\s\S]*?"DisplayName":\s*"([^"]*)"/gi) || [];
 

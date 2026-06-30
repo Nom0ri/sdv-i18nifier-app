@@ -1,3 +1,8 @@
+## [Version 1.5.2] - 2026-07-01
+
+### Changes:
+- **Events**: Text in parenthesis is no longer being excluded in quickquestions.
+
 ## [Version 1.5.1] - 2025-12-30
 
 ### Changes:

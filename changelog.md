@@ -1,7 +1,12 @@
+## [Version 1.5.2] - 2026-07-01
+
+### Changes:
+- **Events**: Text in parenthesis is no longer being excluded in quickquestions.
+
 ## [Version 1.5.1] - 2025-12-30
 
 ### Changes:
-- **Objects**: Fixed converter breaking when a dynamic token was present in the "Name" field.
+- **Objects**: Fixed converter breaking when a dynamic token was present in the `Name` field.
 
 ## [Version 1.5.0] - 2025-09-15
 
